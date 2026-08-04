@@ -44,6 +44,13 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
 .sub{color:#C3D2FA;margin:0;font-size:13px}
 .metrics{display:flex;gap:20px;margin-top:12px;flex-wrap:wrap}
 .metric b{display:block;font-size:17px;font-weight:800;line-height:1.15}
+.metric.last{max-width:340px;min-width:0;border-left:1px solid rgba(255,255,255,.25);padding-left:20px}
+.metric.last b{font-size:13px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clock{position:absolute;right:20px;top:18px;text-align:right;line-height:1.15}
+.clock span{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em;display:block}
+.clock em{font-style:normal;font-size:10.5px;color:#B9CAF8;text-transform:uppercase;letter-spacing:.08em}
+.top-inner{position:relative}
+@media(max-width:700px){.clock{position:static;text-align:left;margin-top:10px}.metric.last{border-left:0;padding-left:0;max-width:100%}}
 .metric span{font-size:10.5px;color:#B9CAF8;text-transform:uppercase;letter-spacing:.08em}
 
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
@@ -93,6 +100,13 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
 .foot{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink-soft);
   font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .foot #views{font-weight:600}
+.foot #views i{font-style:normal;color:var(--blue-700)}
+.legal{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  color:#8492AE;font-size:11.5px;line-height:1.4}
+.legal span:first-child{font-weight:600;color:#6B7A99}
+.legal .note{font-style:italic}
+@media(max-width:600px){.legal{flex-direction:column;gap:4px}}
 @media(max-width:600px){h1{font-size:20px}.grid{grid-template-columns:1fr}.row{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -110,11 +124,15 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
         Шахматка
       </a>
     </div>
+    <div class="clock" id="clock" title="Московское время"><span id="clock-time">--:--:--</span><em id="clock-date"></em></div>
     <h1>Реестр рекламных материалов</h1>
     <p class="sub">Буклеты, генпланы, планировки, рендеры, фото и видео по всем ЖК — в одном месте.</p>
     <div class="metrics">
       <div class="metric"><b id="m-links">—</b><span>материалов</span></div>
       <div class="metric"><b id="m-sec">—</b><span>разделов</span></div>
+      <div class="metric last" id="m-last-box">
+        <b id="m-last">—</b><span id="m-last-when">последнее обновление</span>
+      </div>
     </div>
   </div>
 </header>
@@ -131,8 +149,12 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
   <main id="out"></main>
 
   <div class="foot">
-    <span id="views"></span>
+    <span id="views">Загружаю счётчик…</span>
     <button class="refresh" id="rf">Обновить данные</button>
+  </div>
+  <div class="legal">
+    <span>Разработано отделом маркетинга и рекламы ЮгСтройИнвест</span>
+    <span class="note">Информация носит справочный характер и не является офертой.</span>
   </div>
 </div>
 
@@ -152,7 +174,8 @@ const CFG = {
   TIMEOUT  : 8000,
   // счётчик просмотров: бесплатный CounterAPI, регистрация не нужна
   COUNTER  : "https://api.counterapi.dev/v1/yugstroyinvest",
-  COUNTER_KEY: "materials"
+  COUNTER_KEY: "materials",       // все просмотры
+  COUNTER_UNIQ: "materials-uniq"  // уникальные посетители
 };
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/"+CFG.SHEET_ID+"/edit?gid="+CFG.GID;
 
@@ -370,7 +393,7 @@ function build(rows){
       if(it.name===card.jk) it.name='Материал';
       let up=stamp;
       if(!up){const m=DATE_IN_TEXT.exec(it.name);if(m)up=normDate(m[1]+'.'+m[2]+'.'+m[3]);}
-      card.items.push({name:it.name,url:it.url,updated:up});
+      card.items.push({name:it.name,url:it.url,updated:up,sec:sec.section+'/'+card.jk});
     });
   });
   return data.map(s=>({section:s.section,cards:s.cards.filter(c=>c.items.length)}))
@@ -424,17 +447,92 @@ function metrics(){
   const items=DATA.flatMap(s=>s.cards.flatMap(c=>c.items));
   document.getElementById('m-links').textContent=items.length;
   document.getElementById('m-sec').textContent=DATA.length;
+  showLast(items);
 }
 
-/* ---------- Счётчик просмотров ---------- */
+/* ---------- Часы (московское время) ---------- */
+function tick(){
+  const now=new Date();
+  const opt={timeZone:'Europe/Moscow'};
+  document.getElementById('clock-time').textContent =
+    now.toLocaleTimeString('ru-RU',{...opt,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clock-date').textContent =
+    now.toLocaleDateString('ru-RU',{...opt,weekday:'short',day:'2-digit',month:'long'})+' · МСК';
+}
+setInterval(tick,1000);tick();
+
+/* ---------- Последний обновлённый документ ----------
+   1) если в таблице есть даты — берём самую позднюю;
+   2) иначе отслеживаем появление и смену ссылок между визитами. */
+function ts(str){
+  const m=/^(\d{2})\.(\d{2})\.(\d{4})(?:\s+(\d{2}):(\d{2}))?/.exec(str||'');
+  return m ? new Date(+m[3],+m[2]-1,+m[1],+(m[4]||12),+(m[5]||0)).getTime() : 0;
+}
+const store={
+  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+function trackChanges(items){
+  const KEY='usi:index', LAST='usi:last';
+  const now=Object.fromEntries(items.map(i=>[i.name+'|'+(i.sec||''),i.url||'']));
+  const prev=store.get(KEY);
+  let rec=store.get(LAST);
+  if(prev){
+    const changed=Object.keys(now).find(k=>!(k in prev)) ||
+                  Object.keys(now).find(k=>prev[k]!==now[k]);
+    if(changed){
+      const d=new Date();
+      const [nm,ctx]=changed.split('|');
+      rec={name:(nm==='Материал'&&ctx)?ctx.split('/').pop():nm,
+           when:d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})
+                +' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
+      store.set(LAST,rec);
+    }
+  }
+  store.set(KEY,now);
+  return rec;
+}
+function showLast(items){
+  const dated=items.filter(i=>i.updated).sort((a,b)=>ts(b.updated)-ts(a.updated))[0];
+  const nameEl=document.getElementById('m-last'), whenEl=document.getElementById('m-last-when');
+  if(dated){
+    nameEl.textContent=dated.name; nameEl.title=dated.name;
+    whenEl.textContent='обновлено '+dated.updated;
+    return;
+  }
+  const rec=trackChanges(items);
+  if(rec){
+    nameEl.textContent=rec.name; nameEl.title=rec.name;
+    whenEl.textContent='изменено '+rec.when;
+  }else{
+    nameEl.textContent='изменений нет';
+    whenEl.textContent='последнее обновление';
+  }
+}
+
+/* ---------- Счётчики просмотров ---------- */
+async function hit(key){
+  const r=await fetch(CFG.COUNTER+'/'+key+'/up',{cache:'no-store'});
+  const j=await r.json();
+  const n=j.count ?? j.value ?? (j.data && (j.data.up_count ?? j.data.count));
+  if(n==null) throw 0; return Number(n);
+}
+async function read(key){
+  const r=await fetch(CFG.COUNTER+'/'+key,{cache:'no-store'});
+  const j=await r.json();
+  const n=j.count ?? j.value ?? (j.data && (j.data.up_count ?? j.data.count));
+  return n==null?null:Number(n);
+}
 async function countView(){
   const el=document.getElementById('views');
+  const seen=store.get('usi:seen');
   try{
-    const r=await fetch(CFG.COUNTER+'/'+CFG.COUNTER_KEY+'/up',{cache:'no-store'});
-    const j=await r.json();
-    const n=j.count ?? j.value ?? (j.data && (j.data.up_count ?? j.data.count));
-    if(n==null) throw 0;
-    el.textContent='Просмотров: '+Number(n).toLocaleString('ru-RU');
+    const total=await hit(CFG.COUNTER_KEY);
+    let uniq;
+    if(!seen){ uniq=await hit(CFG.COUNTER_UNIQ); store.set('usi:seen',Date.now()); }
+    else { uniq=await read(CFG.COUNTER_UNIQ); }
+    const f=n=>Number(n).toLocaleString('ru-RU');
+    el.innerHTML='Уникальных посетителей: <i>'+(uniq==null?'—':f(uniq))+'</i> · всего просмотров: <i>'+f(total)+'</i>';
   }catch(e){ el.textContent=''; }
 }
 
