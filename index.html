@@ -111,11 +111,74 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
   font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .foot #views{font-weight:600}
 .foot #views i{font-style:normal;color:var(--blue-700)}
+.foot #views .upd{font-weight:600;font-size:10.5px;color:#98A6BF;margin-left:6px;white-space:nowrap}
 .legal{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
   display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
   color:#8492AE;font-size:11.5px;line-height:1.4}
 .legal span:first-child{font-weight:600;color:#6B7A99}
 .legal .note{font-style:italic}
+
+/* --- быстрые ссылки в шапке --- */
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.quick a{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);
+  color:#EAF0FF;border:1px solid rgba(255,255,255,.22);border-radius:var(--radius-pill);
+  padding:5px 12px;font-size:12px;font-weight:700;transition:.16s}
+.quick a:hover{background:rgba(255,255,255,.26)}
+
+/* --- поиск: подсказка клавиши --- */
+.hint{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;
+  padding:1px 7px;font:inherit;font-size:11px;font-weight:700;color:var(--ink-soft)}
+.search input:focus ~ .hint{display:none}
+
+/* --- вторая строка чипов (ЖК) --- */
+.chips.jk{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.chips.jk .chip{font-size:12px;padding:4px 11px}
+.chips.jk .chip[aria-pressed="true"]{background:var(--blue-100);border-color:#B9CCF7;color:var(--blue-900)}
+
+/* --- строка материала: избранное и копирование --- */
+.row-acts{display:flex;align-items:center;gap:5px;flex:none}
+.icon{border:none;background:none;padding:5px;border-radius:9px;cursor:pointer;
+  color:#9AA8C4;display:inline-flex;transition:.14s;line-height:0}
+.icon:hover{background:var(--blue-050);color:var(--blue-700)}
+.icon.on{color:#E5A21B}
+.icon svg{pointer-events:none}
+.row-name{display:flex;align-items:center;gap:7px}
+.tag{font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  border-radius:5px;padding:1px 5px;flex:none}
+.tag.pdf{background:#FDE8E8;color:#B42318}
+.tag.folder{background:#FEF3D6;color:#9A6400}
+.tag.photo{background:#E4F6EC;color:#0B7B4B}
+.tag.video{background:#EAE6FD;color:#5B3BC4}
+.tag.new{background:var(--blue-700);color:#fff}
+.clicks{font-size:10px;color:#9AA8C4;font-weight:700;margin-left:2px}
+
+/* --- избранное и «новое» --- */
+.section.pin .card{border-color:#F0DCA8;background:#FFFDF7}
+.section.new .card{border-color:#C3D6FA;background:#F8FAFF}
+
+/* --- модальное окно --- */
+.modal{position:fixed;inset:0;background:rgba(10,25,60,.55);display:flex;
+  align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal[hidden]{display:none}
+.modal-box{background:#fff;border-radius:var(--radius-lg);padding:20px;max-width:620px;width:100%;
+  max-height:82vh;overflow:auto;position:relative;box-shadow:0 24px 60px rgba(9,24,66,.3)}
+.modal-box h3{margin:0 0 12px;font-size:16px;font-weight:800}
+.modal-x{position:absolute;right:12px;top:8px;border:none;background:none;font-size:26px;
+  line-height:1;color:#9AA8C4;cursor:pointer}
+.modal-box table{width:100%;border-collapse:collapse;font-size:12.5px}
+.modal-box td{padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.modal-box td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+.modal-box .muted{color:var(--ink-soft);font-size:12px;margin:0 0 12px}
+.bar{height:5px;border-radius:3px;background:var(--blue-500);display:inline-block;vertical-align:middle;margin-right:6px}
+.ok{color:#0B7B4B;font-weight:700}.bad{color:#B42318;font-weight:700}
+
+/* --- всплывающее уведомление --- */
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
+  background:var(--blue-900);color:#fff;padding:9px 18px;border-radius:var(--radius-pill);
+  font-size:13px;font-weight:700;z-index:60;box-shadow:0 10px 26px rgba(9,24,66,.3)}
+.toast[hidden]{display:none}
+.foot-btns{display:flex;gap:6px;flex-wrap:wrap}
 @media(max-width:600px){.legal{flex-direction:column;gap:4px}}
 @media(max-width:600px){h1{font-size:20px}.grid{grid-template-columns:1fr}.row{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -132,6 +195,7 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
       <div class="clock" id="clock" title="Московское время">
         <span id="clock-time">--:--:--</span><em id="clock-date"></em>
       </div>
+      <div class="quick" id="quick"></div>
       <a class="chess" href="https://usi.allio.app:30202/allio/building/buildings" target="_blank" rel="noopener">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         Шахматка
@@ -154,21 +218,37 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
     <div class="search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#12203F" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
       <input id="q" type="search" placeholder="Поиск по ЖК, литеру или типу материала — например «Эстет 47» или «генплан»" autocomplete="off">
+      <kbd class="hint" id="kbd">/</kbd>
     </div>
     <div class="chips" id="chips"></div>
+    <div class="chips jk" id="chips-jk"></div>
   </div>
 
   <main id="out"></main>
 
   <div class="foot">
     <span id="views">Загружаю счётчик…</span>
-    <button class="refresh" id="rf">Обновить данные</button>
+    <span class="foot-btns">
+      <button class="refresh" id="stat">Статистика кликов</button>
+      <button class="refresh" id="check">Проверить ссылки</button>
+      <button class="refresh" id="rf">Обновить данные</button>
+    </span>
   </div>
   <div class="legal">
     <span>Разработано отделом маркетинга и рекламы ЮгСтройИнвест</span>
+    <span><a href="admin.html" style="color:#8492AE">Редактировать реестр</a></span>
     <span class="note">Информация носит справочный характер и не является офертой.</span>
   </div>
 </div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-box">
+    <button class="modal-x" id="modal-x" aria-label="Закрыть">&times;</button>
+    <h3 id="modal-title"></h3>
+    <div id="modal-body"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
 
 <script>
 /* ================== НАСТРОЙКИ ==================
@@ -187,7 +267,8 @@ const CFG = {
   // счётчик просмотров: бесплатный CounterAPI, регистрация не нужна
   COUNTER  : "https://api.counterapi.dev/v1/yugstroyinvest",
   COUNTER_KEY: "materials",       // все просмотры
-  COUNTER_UNIQ: "materials-uniq"  // уникальные посетители
+  COUNTER_UNIQ: "materials-uniq", // уникальные посетители
+  REFRESH_MIN: 30                 // как часто обновлять счётчик, минут
 };
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/"+CFG.SHEET_ID+"/edit?gid="+CFG.GID;
 
@@ -386,7 +467,7 @@ function build(rows){
       if(inline.length){
         const tail=A.replace(URL_RE,' ').split(/\s{2,}/).pop().trim();
         card={jk:label,items:[]};sec.cards.push(card);
-        inline.forEach(it=>card.items.push({name:clean(tail)||label,url:it.url,updated:stamp}));
+        inline.forEach(it=>card.items.push({name:clean(tail)||label,url:it.url,updated:stamp,jk:label,sec:label+'/'+label}));
         card=null;
       }
       URL_RE.lastIndex=0;return;
@@ -405,159 +486,300 @@ function build(rows){
       if(it.name===card.jk) it.name='Материал';
       let up=stamp;
       if(!up){const m=DATE_IN_TEXT.exec(it.name);if(m)up=normDate(m[1]+'.'+m[2]+'.'+m[3]);}
-      card.items.push({name:it.name,url:it.url,updated:up,sec:sec.section+'/'+card.jk});
+      card.items.push({name:it.name,url:it.url,updated:up,jk:card.jk,sec:sec.section+'/'+card.jk});
     });
   });
   return data.map(s=>({section:s.section,cards:s.cards.filter(c=>c.items.length)}))
              .filter(s=>s.cards.length);
 }
 
+/* ================== ХРАНИЛИЩЕ ================== */
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+
+/* ================== БЫСТРЫЕ ССЫЛКИ (правьте здесь) ================== */
+const QUICK=[
+  {name:"Сайт ЮСИ", url:"https://yugstroyinvest.ru"},
+  {name:"Таблица", url:SHEET_URL}
+];
+
 /* ================== РЕНДЕР ================== */
-const out=document.getElementById('out'),chips=document.getElementById('chips');
-let DATA=[],active='Все разделы',query='';
+const out=document.getElementById('out'),chips=document.getElementById('chips'),
+      chipsJK=document.getElementById('chips-jk'),qInput=document.getElementById('q');
+let DATA=[],active='Все разделы',activeJK='Все ЖК',query='';
+let FAV=store.get('usi:fav',[]), CLICKS=store.get('usi:clicks',{}), SEEN=store.get('usi:seen-items',null);
 
 const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const key=it=>(it.sec||'')+'|'+it.name;
 
-function itemHTML(it){
-  const btn = it.url
-    ? '<a class="btn" href="'+esc(it.url)+'" target="_blank" rel="noopener">Открыть</a>'
-    : '<span class="btn empty" title="Ссылка в таблице не заполнена" aria-label="Ссылки нет"></span>';
-  return '<div class="row"><div class="row-main"><div class="row-name">'+esc(it.name)+'</div></div>'+btn+'</div>';
+function typeTag(it){
+  const u=(it.url||'').toLowerCase(), n=(it.name||'').toLowerCase(), sec=(it.sec||'').toLowerCase();
+  if(/\/d\/|\/folders\//.test(u)) return '<span class="tag folder">папка</span>';
+  if(/\.pdf|\/file\/d\/|буклет|генплан|презентац|рендер/.test(u+n+sec)) return '<span class="tag pdf">pdf</span>';
+  if(/видео|ролик/.test(sec+n)) return '<span class="tag video">видео</span>';
+  if(/фото|съём|съем/.test(sec+n)) return '<span class="tag photo">фото</span>';
+  return '';
 }
-function matches(sec,jk,it){
+
+/* ---------- Уведомление ---------- */
+let toastT=null;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.hidden=false;
+  clearTimeout(toastT); toastT=setTimeout(()=>el.hidden=true,2200);
+}
+
+/* ---------- Строка материала ---------- */
+function itemHTML(it){
+  const k=key(it), fav=FAV.includes(k), cl=CLICKS[k]||0;
+  const btn = it.url
+    ? '<a class="btn" href="'+esc(it.url)+'" target="_blank" rel="noopener" data-k="'+esc(k)+'">Открыть</a>'
+    : '<span class="btn empty" title="Ссылка в таблице не заполнена" aria-label="Ссылки нет"></span>';
+  const copy = it.url
+    ? '<button class="icon js-copy" data-url="'+esc(it.url)+'" title="Скопировать ссылку" aria-label="Скопировать ссылку">'
+      +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>' : '';
+  const star = '<button class="icon js-fav'+(fav?' on':'')+'" data-k="'+esc(k)+'" title="'+(fav?'Убрать из избранного':'В избранное')+'" aria-label="Избранное">'
+    +'<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></button>';
+  const isNew = SEEN && !SEEN.includes(k);
+  return '<div class="row"><div class="row-main"><div class="row-name">'+typeTag(it)
+    +(isNew?'<span class="tag new">новое</span>':'')
+    +'<span>'+esc(it.name)+'</span>'+(cl?'<span class="clicks">'+cl+'</span>':'')
+    +'</div></div><div class="row-acts">'+star+copy+btn+'</div></div>';
+}
+
+function matches(it){
+  if(activeJK!=='Все ЖК' && it.jk!==activeJK) return false;
   if(!query) return true;
-  const hay=(sec+' '+jk+' '+it.name).toLowerCase();
+  const hay=((it.sec||'')+' '+it.name).toLowerCase();
   return query.split(/\s+/).every(w=>hay.includes(w));
 }
+function cardHTML(jk,items){
+  return '<article class="card"><h3><span class="dot"></span>'+esc(jk)+'</h3>'+items.map(itemHTML).join('')+'</article>';
+}
+function sectionHTML(title,cards,n,cls){
+  return '<section class="section '+(cls||'')+'"><div class="section-head"><h2>'+esc(title)
+    +'</h2><span class="count">'+n+'</span></div><div class="grid">'+cards+'</div></section>';
+}
+
 function render(){
+  const all=DATA.flatMap(s=>s.cards.flatMap(c=>c.items));
   let html='',shown=0;
+
+  // Избранное
+  if(active==='Все разделы'){
+    const fav=all.filter(i=>FAV.includes(key(i))&&matches(i));
+    if(fav.length){ html+=sectionHTML('★ Избранное',cardHTML('Ваши материалы',fav),fav.length,'pin'); }
+    // Новое
+    if(SEEN){
+      const nw=all.filter(i=>!SEEN.includes(key(i))&&matches(i));
+      if(nw.length) html+=sectionHTML('Новое',cardHTML('Добавлено с прошлого визита',nw),nw.length,'new');
+    }
+  }
+
   DATA.forEach(sec=>{
     if(active!=='Все разделы'&&active!==sec.section) return;
     let body='',n=0;
     sec.cards.forEach(card=>{
-      const items=card.items.filter(it=>matches(sec.section,card.jk,it));
+      const items=card.items.filter(matches);
       if(!items.length) return;
-      n+=items.length;
-      body+='<article class="card"><h3><span class="dot"></span>'+esc(card.jk)+'</h3>'+items.map(itemHTML).join('')+'</article>';
+      n+=items.length; body+=cardHTML(card.jk,items);
     });
     if(!n) return;
-    shown+=n;
-    html+='<section class="section"><div class="section-head"><h2>'+esc(sec.section)+'</h2><span class="count">'+n+'</span></div><div class="grid">'+body+'</div></section>';
+    shown+=n; html+=sectionHTML(sec.section,body,n);
   });
-  out.innerHTML=shown?html:'<div class="empty"><b>Ничего не нашлось</b><br>Измените запрос или выберите другой раздел.</div>';
+  out.innerHTML=(html)?html:'<div class="empty"><b>Ничего не нашлось</b><br>Измените запрос или снимите фильтры.</div>';
+}
+
+/* ---------- Фильтры ---------- */
+function mkChip(box,name,isActive,onclick){
+  const b=document.createElement('button');
+  b.className='chip';b.textContent=name;b.setAttribute('aria-pressed',isActive);
+  b.onclick=()=>{[...box.children].forEach(c=>c.setAttribute('aria-pressed',c===b));onclick();render();};
+  box.appendChild(b);
 }
 function buildChips(){
-  chips.innerHTML='';
-  ['Все разделы',...DATA.map(s=>s.section)].forEach(name=>{
-    const b=document.createElement('button');
-    b.className='chip';b.textContent=name;b.setAttribute('aria-pressed',name===active);
-    b.onclick=()=>{active=name;[...chips.children].forEach(c=>c.setAttribute('aria-pressed',c===b));render();};
-    chips.appendChild(b);
-  });
+  chips.innerHTML='';chipsJK.innerHTML='';
+  ['Все разделы',...DATA.map(s=>s.section)].forEach(n=>
+    mkChip(chips,n,n===active,()=>active=n));
+  // в фильтр попадают только настоящие ЖК: те, что встречаются минимум в двух разделах
+  const cnt={};
+  DATA.forEach(s=>[...new Set(s.cards.map(c=>c.jk))].forEach(j=>cnt[j]=(cnt[j]||0)+1));
+  const jks=Object.keys(cnt).filter(j=>cnt[j]>=2&&!/^материал/i.test(j)&&j.length<24)
+    .sort((a,b)=>cnt[b]-cnt[a]||a.localeCompare(b,'ru'));
+  ['Все ЖК',...jks].forEach(n=>mkChip(chipsJK,n,n===activeJK,()=>activeJK=n));
 }
+
+/* ---------- Быстрые ссылки ---------- */
+document.getElementById('quick').innerHTML=QUICK.map(q=>
+  '<a href="'+esc(q.url)+'" target="_blank" rel="noopener">'+esc(q.name)+'</a>').join('');
+
+/* ---------- Клики по строкам ---------- */
+document.addEventListener('click',async e=>{
+  const cp=e.target.closest('.js-copy');
+  if(cp){
+    const url=cp.dataset.url;
+    try{ await navigator.clipboard.writeText(url); }
+    catch(err){ const t=document.createElement('textarea');t.value=url;document.body.appendChild(t);
+      t.select();document.execCommand('copy');t.remove(); }
+    toast('Ссылка скопирована'); return;
+  }
+  const fv=e.target.closest('.js-fav');
+  if(fv){
+    const k=fv.dataset.k;
+    FAV=FAV.includes(k)?FAV.filter(x=>x!==k):[...FAV,k];
+    store.set('usi:fav',FAV); render();
+    toast(FAV.includes(k)?'Добавлено в избранное':'Убрано из избранного'); return;
+  }
+  const op=e.target.closest('.btn[data-k]');
+  if(op){ const k=op.dataset.k; CLICKS[k]=(CLICKS[k]||0)+1; store.set('usi:clicks',CLICKS); }
+});
+
+/* ---------- Метрики и последнее обновление ---------- */
 function metrics(){
   const items=DATA.flatMap(s=>s.cards.flatMap(c=>c.items));
   document.getElementById('m-links').textContent=items.length;
   document.getElementById('m-sec').textContent=DATA.length;
   showLast(items);
+  // фиксируем состав для метки «новое» — со следующего визита
+  setTimeout(()=>store.set('usi:seen-items',items.map(key)),4000);
 }
-
-/* ---------- Часы (московское время) ---------- */
-function tick(){
-  const now=new Date();
-  const opt={timeZone:'Europe/Moscow'};
-  document.getElementById('clock-time').textContent =
-    now.toLocaleTimeString('ru-RU',{...opt,hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('clock-date').textContent =
-    now.toLocaleDateString('ru-RU',{...opt,weekday:'short',day:'2-digit',month:'long'})+' · МСК';
-}
-setInterval(tick,1000);tick();
-
-/* ---------- Последний обновлённый документ ----------
-   1) если в таблице есть даты — берём самую позднюю;
-   2) иначе отслеживаем появление и смену ссылок между визитами. */
 function ts(str){
   const m=/^(\d{2})\.(\d{2})\.(\d{4})(?:\s+(\d{2}):(\d{2}))?/.exec(str||'');
-  return m ? new Date(+m[3],+m[2]-1,+m[1],+(m[4]||12),+(m[5]||0)).getTime() : 0;
+  return m?new Date(+m[3],+m[2]-1,+m[1],+(m[4]||12),+(m[5]||0)).getTime():0;
 }
-const store={
-  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
-  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-};
 function trackChanges(items){
-  const KEY='usi:index', LAST='usi:last';
-  const now=Object.fromEntries(items.map(i=>[i.name+'|'+(i.sec||''),i.url||'']));
-  const prev=store.get(KEY);
-  let rec=store.get(LAST);
+  const KEY='usi:index',LAST='usi:last';
+  const now=Object.fromEntries(items.map(i=>[key(i),i.url||'']));
+  const prev=store.get(KEY);let rec=store.get(LAST);
   if(prev){
-    const changed=Object.keys(now).find(k=>!(k in prev)) ||
-                  Object.keys(now).find(k=>prev[k]!==now[k]);
+    const changed=Object.keys(now).find(k=>!(k in prev))||Object.keys(now).find(k=>prev[k]!==now[k]);
     if(changed){
+      const [ctx,nm]=[changed.split('|')[0],changed.split('|')[1]];
       const d=new Date();
-      const [nm,ctx]=changed.split('|');
       rec={name:(nm==='Материал'&&ctx)?ctx.split('/').pop():nm,
            when:d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})
                 +' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
       store.set(LAST,rec);
     }
   }
-  store.set(KEY,now);
-  return rec;
+  store.set(KEY,now);return rec;
 }
 function showLast(items){
   const dated=items.filter(i=>i.updated).sort((a,b)=>ts(b.updated)-ts(a.updated))[0];
-  const nameEl=document.getElementById('m-last'), whenEl=document.getElementById('m-last-when');
-  if(dated){
-    nameEl.textContent=dated.name; nameEl.title=dated.name;
-    whenEl.textContent='обновлено '+dated.updated;
-    return;
-  }
+  const n=document.getElementById('m-last'),w=document.getElementById('m-last-when');
+  if(dated){ n.textContent=dated.name;n.title=dated.name;w.textContent='обновлено '+dated.updated;return; }
   const rec=trackChanges(items);
-  if(rec){
-    nameEl.textContent=rec.name; nameEl.title=rec.name;
-    whenEl.textContent='изменено '+rec.when;
-  }else{
-    nameEl.textContent='изменений нет';
-    whenEl.textContent='последнее обновление';
-  }
+  if(rec){ n.textContent=rec.name;n.title=rec.name;w.textContent='изменено '+rec.when; }
+  else{ n.textContent='изменений нет';w.textContent='последнее обновление'; }
 }
+
+/* ---------- Часы (московское время) ---------- */
+function tick(){
+  const now=new Date(),opt={timeZone:'Europe/Moscow'};
+  document.getElementById('clock-time').textContent=
+    now.toLocaleTimeString('ru-RU',{...opt,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clock-date').textContent=
+    now.toLocaleDateString('ru-RU',{...opt,weekday:'short',day:'2-digit',month:'long'})+' · МСК';
+}
+setInterval(tick,1000);tick();
 
 /* ---------- Счётчики просмотров ---------- */
-async function hit(key){
-  const r=await fetch(CFG.COUNTER+'/'+key+'/up',{cache:'no-store'});
-  const j=await r.json();
-  const n=j.count ?? j.value ?? (j.data && (j.data.up_count ?? j.data.count));
-  if(n==null) throw 0; return Number(n);
-}
-async function read(key){
-  const r=await fetch(CFG.COUNTER+'/'+key,{cache:'no-store'});
-  const j=await r.json();
-  const n=j.count ?? j.value ?? (j.data && (j.data.up_count ?? j.data.count));
-  return n==null?null:Number(n);
-}
-async function countView(){
-  const el=document.getElementById('views');
-  const seen=store.get('usi:seen');
+async function hit(k){const r=await fetch(CFG.COUNTER+'/'+k+'/up',{cache:'no-store'});const j=await r.json();
+  const n=j.count??j.value??(j.data&&(j.data.up_count??j.data.count));if(n==null)throw 0;return Number(n);}
+async function read(k){const r=await fetch(CFG.COUNTER+'/'+k,{cache:'no-store'});const j=await r.json();
+  const n=j.count??j.value??(j.data&&(j.data.up_count??j.data.count));return n==null?null:Number(n);}
+async function countView(first){
+  const el=document.getElementById('views'),WIN=CFG.REFRESH_MIN*60*1000;
+  const last=store.get('usi:visit',0),newVisit=(Date.now()-last)>WIN;
   try{
-    const total=await hit(CFG.COUNTER_KEY);
-    let uniq;
-    if(!seen){ uniq=await hit(CFG.COUNTER_UNIQ); store.set('usi:seen',Date.now()); }
-    else { uniq=await read(CFG.COUNTER_UNIQ); }
-    const f=n=>Number(n).toLocaleString('ru-RU');
-    el.innerHTML='Уникальных посетителей: <i>'+(uniq==null?'—':f(uniq))+'</i> · всего просмотров: <i>'+f(total)+'</i>';
+    let total,uniq;
+    if(first&&newVisit){ total=await hit(CFG.COUNTER_KEY);uniq=await hit(CFG.COUNTER_UNIQ);store.set('usi:visit',Date.now()); }
+    else{ total=first?await hit(CFG.COUNTER_KEY):await read(CFG.COUNTER_KEY); uniq=await read(CFG.COUNTER_UNIQ); }
+    const f=n=>n==null?'—':Number(n).toLocaleString('ru-RU');
+    const t=new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+    el.innerHTML='Уникальных посетителей: <i>'+f(uniq)+'</i> · всего просмотров: <i>'+f(total)
+      +'</i> <b class="upd" title="Обновляется каждые '+CFG.REFRESH_MIN+' мин">обновлено '+t+'</b>';
   }catch(e){ el.textContent=''; }
 }
+let viewsTimer=null;
+function scheduleViews(){clearInterval(viewsTimer);viewsTimer=setInterval(()=>countView(false),CFG.REFRESH_MIN*60*1000);}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')countView(false);});
 
+/* ---------- Модальное окно ---------- */
+function modal(title,html){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('modal').hidden=false;
+}
+document.getElementById('modal-x').onclick=()=>document.getElementById('modal').hidden=true;
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.hidden=true;};
+
+/* ---------- Статистика кликов ---------- */
+document.getElementById('stat').onclick=()=>{
+  const rows=Object.entries(CLICKS).sort((a,b)=>b[1]-a[1]);
+  if(!rows.length) return modal('Статистика кликов',
+    '<p class="muted">Пока никто ничего не открывал с этого устройства. Счётчик заполнится по мере работы.</p>');
+  const max=rows[0][1];
+  const list=rows.slice(0,40).map(([k,v])=>{
+    const [ctx,nm]=[k.split('|')[0],k.split('|')[1]];
+    return '<tr><td><b>'+esc(nm)+'</b><br><span class="muted">'+esc(ctx)+'</span></td>'
+      +'<td><span class="bar" style="width:'+Math.round(v/max*70+6)+'px"></span>'+v+'</td></tr>';
+  }).join('');
+  modal('Статистика кликов',
+    '<p class="muted">Учитываются открытия материалов на этом устройстве. Всего кликов: '
+    +rows.reduce((a,b)=>a+b[1],0)+'.</p><table>'+list+'</table>'
+    +'<p class="muted" style="margin-top:12px"><button class="refresh" onclick="localStorage.removeItem(\'usi:clicks\');location.reload()">Сбросить статистику</button></p>');
+};
+
+/* ---------- Проверка ссылок ---------- */
+document.getElementById('check').onclick=async()=>{
+  const items=DATA.flatMap(s=>s.cards.flatMap(c=>c.items));
+  const noUrl=items.filter(i=>!i.url);
+  const urls=items.filter(i=>i.url);
+  const seen={},dup=[];
+  urls.forEach(i=>{ if(seen[i.url]) dup.push([seen[i.url],i]); else seen[i.url]=i; });
+  const bad=urls.filter(i=>!/^https:\/\//.test(i.url));
+  const google=urls.filter(i=>/drive\.google|docs\.google/.test(i.url));
+  let html='<p class="muted">Проверка выполняется по составу таблицы. Доступность файлов браузер проверить не может — чужие домены это запрещают, для полной проверки используйте скрипт <b>check_links.py</b>.</p><table>';
+  html+='<tr><td>Всего материалов</td><td>'+items.length+'</td></tr>';
+  html+='<tr><td>Со ссылкой</td><td class="ok">'+urls.length+'</td></tr>';
+  html+='<tr><td>Без ссылки</td><td class="'+(noUrl.length?'bad':'ok')+'">'+noUrl.length+'</td></tr>';
+  html+='<tr><td>Не https</td><td class="'+(bad.length?'bad':'ok')+'">'+bad.length+'</td></tr>';
+  html+='<tr><td>Дубли ссылок</td><td class="'+(dup.length?'bad':'ok')+'">'+dup.length+'</td></tr>';
+  html+='<tr><td>На Google Диске<br><span class="muted">из России открываются нестабильно</span></td><td>'+google.length+'</td></tr>';
+  html+='</table>';
+  if(noUrl.length) html+='<p class="muted" style="margin-top:12px"><b>Без ссылки:</b><br>'
+    +noUrl.map(i=>esc((i.sec||'')+' — '+i.name)).join('<br>')+'</p>';
+  if(dup.length) html+='<p class="muted" style="margin-top:12px"><b>Дубли:</b><br>'
+    +dup.map(p=>esc(p[0].name+' = '+p[1].name)).join('<br>')+'</p>';
+  modal('Проверка ссылок',html);
+};
+
+/* ---------- Поиск и горячие клавиши ---------- */
+qInput.addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ document.getElementById('modal').hidden=true; if(document.activeElement===qInput){qInput.value='';query='';render();qInput.blur();} }
+  if((e.key==='/'||(e.key==='k'&&(e.metaKey||e.ctrlKey))) && document.activeElement!==qInput){
+    e.preventDefault();qInput.focus();
+  }
+});
+
+/* ---------- Офлайн ---------- */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+/* ---------- Старт ---------- */
 async function start(){
   const res=await load();
   DATA=build(res.rows);
   buildChips();render();metrics();
 }
-
-document.getElementById('q').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
 document.getElementById('rf').onclick=start;
 start();
-countView();
+countView(true);scheduleViews();
 </script>
 </body>
 </html>
