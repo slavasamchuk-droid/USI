@@ -110,6 +110,9 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
 .foot{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);color:var(--ink-soft);
   font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .foot #views{font-weight:600}
+.qr{text-align:center}
+.qr svg{border-radius:10px;box-shadow:0 4px 16px rgba(15,42,107,.14)}
+.qr-url{font-size:11px;color:#8492AE;word-break:break-all;margin:6px 0 0}
 .foot #views i{font-style:normal;color:var(--blue-700)}
 .foot #views .upd{font-weight:600;font-size:10.5px;color:#98A6BF;margin-left:6px;white-space:nowrap}
 .legal{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
@@ -229,14 +232,11 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
   <div class="foot">
     <span id="views">Загружаю счётчик…</span>
     <span class="foot-btns">
-      <button class="refresh" id="stat">Статистика кликов</button>
-      <button class="refresh" id="check">Проверить ссылки</button>
       <button class="refresh" id="rf">Обновить данные</button>
     </span>
   </div>
   <div class="legal">
     <span>Разработано отделом маркетинга и рекламы ЮгСтройИнвест</span>
-    <span><a href="admin.html" style="color:#8492AE">Редактировать реестр</a></span>
     <span class="note">Информация носит справочный характер и не является офертой.</span>
   </div>
 </div>
@@ -264,11 +264,10 @@ const CFG = {
   PUB_CSV  : "",
   LOCAL_CSV: "data.csv",
   TIMEOUT  : 8000,
-  // счётчик просмотров: бесплатный CounterAPI, регистрация не нужна
-  COUNTER  : "https://api.counterapi.dev/v1/yugstroyinvest",
-  COUNTER_KEY: "materials",       // все просмотры
-  COUNTER_UNIQ: "materials-uniq", // уникальные посетители
-  REFRESH_MIN: 30                 // как часто обновлять счётчик, минут
+  // ---- счётчик посещений ----
+  // KEY — общий ключ проекта. Сделайте его уникальным, иначе цифры смешаются с чужими.
+  COUNTER_KEY : "usi-materials-rnd",
+  REFRESH_MIN : 30                 // как часто обновлять счётчик, минут
 };
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/"+CFG.SHEET_ID+"/edit?gid="+CFG.GID;
 
@@ -540,13 +539,16 @@ function itemHTML(it){
   const copy = it.url
     ? '<button class="icon js-copy" data-url="'+esc(it.url)+'" title="Скопировать ссылку" aria-label="Скопировать ссылку">'
       +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>' : '';
+  const qr = it.url
+    ? '<button class="icon js-qr" data-url="'+esc(it.url)+'" data-n="'+esc(it.name)+'" title="QR-код для клиента" aria-label="QR-код">'
+      +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 19h2M19 14h2v2"/></svg></button>' : '';
   const star = '<button class="icon js-fav'+(fav?' on':'')+'" data-k="'+esc(k)+'" title="'+(fav?'Убрать из избранного':'В избранное')+'" aria-label="Избранное">'
     +'<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></button>';
   const isNew = SEEN && !SEEN.includes(k);
   return '<div class="row"><div class="row-main"><div class="row-name">'+typeTag(it)
     +(isNew?'<span class="tag new">новое</span>':'')
     +'<span>'+esc(it.name)+'</span>'+(cl?'<span class="clicks">'+cl+'</span>':'')
-    +'</div></div><div class="row-acts">'+star+copy+btn+'</div></div>';
+    +'</div></div><div class="row-acts">'+star+qr+copy+btn+'</div></div>';
 }
 
 function matches(it){
@@ -632,9 +634,137 @@ document.addEventListener('click',async e=>{
     store.set('usi:fav',FAV); render();
     toast(FAV.includes(k)?'Добавлено в избранное':'Убрано из избранного'); return;
   }
+  const qb=e.target.closest('.js-qr');
+  if(qb){ showQR(qb.dataset.url,qb.dataset.n); return; }
   const op=e.target.closest('.btn[data-k]');
   if(op){ const k=op.dataset.k; CLICKS[k]=(CLICKS[k]||0)+1; store.set('usi:clicks',CLICKS); }
 });
+
+/* ---------- QR-код (собственная реализация, без внешних библиотек) ---------- */
+function qrMake(text){
+  // байтовый режим, коррекция L, версия подбирается по длине
+  const cap=[17,32,53,78,106,134,154,192,230,271,321,367,425,458,520,586,644,718,792,858];
+  let ver=0; while(ver<cap.length && text.length>cap[ver]) ver++;
+  ver=Math.max(ver+1,1); if(text.length>cap[cap.length-1]) return null;
+  const size=17+4*ver;
+  const ecTotal=[7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28][ver-1];
+  const blocks=[1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8][ver-1];
+  const totalCw=Math.floor((size*size-(ver>1?(Math.pow(Math.floor(ver/7)+2,2)*25-(ver>=7?36:0)):0)
+    -3*64-2*(size-16)-31-(ver>=7?36:0))/8);
+  // — упрощение: используем таблицу общего числа кодовых слов
+  const CW=[26,44,70,100,134,172,196,242,292,346,404,466,532,581,655,733,815,901,991,1085][ver-1];
+  const ecPer=ecTotal, dataCw=CW-ecPer*blocks;
+
+  // GF(256)
+  const EXP=new Array(512),LOG=new Array(256);
+  for(let i=0,x=1;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d;}
+  for(let i=255;i<512;i++)EXP[i]=EXP[i-255];
+  const mul=(a,b)=>a&&b?EXP[LOG[a]+LOG[b]]:0;
+  function rsPoly(n){let p=[1];for(let i=0;i<n;i++){const q=[1,EXP[i]],r=new Array(p.length+1).fill(0);
+    for(let j=0;j<p.length;j++)for(let k=0;k<2;k++)r[j+k]^=mul(p[j],q[k]);p=r;}return p;}
+  function ecc(data,n){const gen=rsPoly(n);const res=new Array(n).fill(0);
+    for(const d of data){const f=d^res[0];res.shift();res.push(0);
+      if(f)for(let i=0;i<n;i++)res[i]^=mul(gen[i+1],f);}
+    return res;}
+
+  // битовый поток
+  const bytes=new TextEncoder().encode(text);
+  const bits=[];
+  const push=(v,n)=>{for(let i=n-1;i>=0;i--)bits.push((v>>i)&1);};
+  push(4,4); push(bytes.length, ver<10?8:16);
+  bytes.forEach(b=>push(b,8));
+  const cap8=dataCw*8;
+  if(bits.length>cap8) return null;
+  push(0,Math.min(4,cap8-bits.length));
+  while(bits.length%8) bits.push(0);
+  const dat=[]; for(let i=0;i<bits.length;i+=8){let v=0;for(let j=0;j<8;j++)v=(v<<1)|bits[i+j];dat.push(v);}
+  const pad=[0xEC,0x11]; let pi=0; while(dat.length<dataCw) dat.push(pad[pi++%2]);
+
+  // блоки
+  const short=Math.floor(dataCw/blocks), extra=dataCw%blocks;
+  const dBlocks=[],eBlocks=[]; let off=0;
+  for(let i=0;i<blocks;i++){
+    const len=short+(i>=blocks-extra?1:0);
+    const b=dat.slice(off,off+len); off+=len;
+    dBlocks.push(b); eBlocks.push(ecc(b,ecPer));
+  }
+  const out=[];
+  const maxLen=Math.max(...dBlocks.map(b=>b.length));
+  for(let i=0;i<maxLen;i++) dBlocks.forEach(b=>{if(i<b.length)out.push(b[i])});
+  for(let i=0;i<ecPer;i++) eBlocks.forEach(b=>out.push(b[i]));
+
+  // матрица
+  const m=Array.from({length:size},()=>new Array(size).fill(null));
+  const set=(r,c,v)=>{if(r>=0&&c>=0&&r<size&&c<size)m[r][c]=v;};
+  function finder(r,c){for(let i=-1;i<8;i++)for(let j=-1;j<8;j++){
+    const v=(i>=0&&i<=6&&(j===0||j===6))||(j>=0&&j<=6&&(i===0||i===6))||(i>=2&&i<=4&&j>=2&&j<=4);
+    set(r+i,c+j,v?1:0);}}
+  finder(0,0);finder(0,size-7);finder(size-7,0);
+  for(let i=8;i<size-8;i++){m[6][i]=i%2?0:1;m[i][6]=i%2?0:1;}
+  // выравнивающие узоры
+  const AL=[[],[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],
+            [6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],
+            [6,30,56,82],[6,30,58,86],[6,34,62,90]][ver];
+  if(AL) AL.forEach(r=>AL.forEach(c=>{
+    if(m[r][c]!==null) return;
+    for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)
+      set(r+i,c+j,(Math.max(Math.abs(i),Math.abs(j))!==1)?1:0);}));
+  set(size-8,8,1);
+
+  // формат (маска 0, уровень L)
+  const fmt=(()=>{let d=(1<<3)|0; let v=d<<10;
+    for(let i=4;i>=0;i--) if((v>>(i+10))&1) v^=0x537<<i;
+    return ((d<<10)|v)^0x5412;})();
+  for(let i=0;i<15;i++){
+    const b=(fmt>>i)&1;
+    if(i<6) set(i,8,b); else if(i<8) set(i+1,8,b); else if(i===8) set(8,7,b);
+    else set(8,14-i,b);
+    if(i<8) set(8,size-1-i,b); else set(size-15+i,8,b);
+  }
+  // версия ≥7
+  if(ver>=7){
+    let v=ver<<12; for(let i=5;i>=0;i--) if((v>>(i+12))&1) v^=0x1f25<<i;
+    const vb=(ver<<12)|v;
+    for(let i=0;i<18;i++){const b=(vb>>i)&1;
+      set(Math.floor(i/3),size-11+i%3,b); set(size-11+i%3,Math.floor(i/3),b);}
+  }
+  // данные зигзагом + маска 0
+  let idx=0,bit=7,up=true;
+  for(let c=size-1;c>0;c-=2){
+    if(c===6)c--;
+    for(let n=0;n<size;n++){
+      const r=up?size-1-n:n;
+      for(let k=0;k<2;k++){
+        const cc=c-k;
+        if(m[r][cc]!==null) continue;
+        let v=0;
+        if(idx<out.length) v=(out[idx]>>bit)&1;
+        if((r+cc)%2===0) v^=1;             // маска 0
+        m[r][cc]=v;
+        if(--bit<0){bit=7;idx++;}
+      }
+    }
+    up=!up;
+  }
+  return m.map(r=>r.map(v=>v?1:0));
+}
+
+function showQR(url,name){
+  const m=qrMake(url);
+  let body;
+  if(!m){ body='<p class="muted">Ссылка слишком длинная для QR-кода. Воспользуйтесь кнопкой копирования.</p>'; }
+  else{
+    const n=m.length,q=4,S=n+q*2,px=7;
+    let rects='';
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++)
+      if(m[r][c]) rects+='<rect x="'+((c+q)*px)+'" y="'+((r+q)*px)+'" width="'+px+'" height="'+px+'"/>';
+    body='<div class="qr"><svg width="'+(S*px)+'" height="'+(S*px)+'" viewBox="0 0 '+(S*px)+' '+(S*px)+'" xmlns="http://www.w3.org/2000/svg">'
+      +'<rect width="100%" height="100%" fill="#fff"/><g fill="#12203F">'+rects+'</g></svg>'
+      +'<p class="muted">Наведите камеру телефона — материал откроется сразу.</p>'
+      +'<p class="qr-url">'+esc(url)+'</p></div>';
+  }
+  modal(name||'QR-код',body);
+}
 
 /* ---------- Метрики и последнее обновление ---------- */
 function metrics(){
@@ -685,23 +815,66 @@ function tick(){
 }
 setInterval(tick,1000);tick();
 
-/* ---------- Счётчики просмотров ---------- */
-async function hit(k){const r=await fetch(CFG.COUNTER+'/'+k+'/up',{cache:'no-store'});const j=await r.json();
-  const n=j.count??j.value??(j.data&&(j.data.up_count??j.data.count));if(n==null)throw 0;return Number(n);}
-async function read(k){const r=await fetch(CFG.COUNTER+'/'+k,{cache:'no-store'});const j=await r.json();
-  const n=j.count??j.value??(j.data&&(j.data.up_count??j.data.count));return n==null?null:Number(n);}
-async function countView(first){
-  const el=document.getElementById('views'),WIN=CFG.REFRESH_MIN*60*1000;
-  const last=store.get('usi:visit',0),newVisit=(Date.now()-last)>WIN;
+/* ---------- Счётчик посещений ----------
+   Работает через бесплатные сервисы без регистрации. Провайдеры пробуются по очереди,
+   рабочий запоминается — при следующих заходах лишних запросов нет.
+   Уникальные считаются по отдельному ключу: устройство добавляет единицу
+   не чаще раза в сутки. Всего просмотров растёт при каждом открытии. */
+const PROVIDERS=[
+  { name:'countapi',
+    up:  k=>'https://countapi.mileshilliard.com/api/v1/hit/'+k,
+    get: k=>'https://countapi.mileshilliard.com/api/v1/get/'+k },
+  { name:'counterapi',
+    up:  k=>'https://api.counterapi.dev/v1/usi/'+k+'/up',
+    get: k=>'https://api.counterapi.dev/v1/usi/'+k }
+];
+const num=j=>{
+  const v=j&&(j.value??j.count??(j.data&&(j.data.up_count??j.data.count??j.data.value)));
+  const n=Number(v); return Number.isFinite(n)?n:null;
+};
+async function ask(url){
+  const c=new AbortController(), t=setTimeout(()=>c.abort(),5000);
   try{
-    let total,uniq;
-    if(first&&newVisit){ total=await hit(CFG.COUNTER_KEY);uniq=await hit(CFG.COUNTER_UNIQ);store.set('usi:visit',Date.now()); }
-    else{ total=first?await hit(CFG.COUNTER_KEY):await read(CFG.COUNTER_KEY); uniq=await read(CFG.COUNTER_UNIQ); }
-    const f=n=>n==null?'—':Number(n).toLocaleString('ru-RU');
-    const t=new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
-    el.innerHTML='Уникальных посетителей: <i>'+f(uniq)+'</i> · всего просмотров: <i>'+f(total)
-      +'</i> <b class="upd" title="Обновляется каждые '+CFG.REFRESH_MIN+' мин">обновлено '+t+'</b>';
-  }catch(e){ el.textContent=''; }
+    const r=await fetch(url,{signal:c.signal,cache:'no-store'});
+    if(!r.ok) return null;
+    return num(await r.json());
+  }catch(e){ return null; }
+  finally{ clearTimeout(t); }
+}
+async function counter(key,inc){
+  const saved=store.get('usi:prov',null);
+  const list=saved?[...PROVIDERS.filter(p=>p.name===saved),...PROVIDERS.filter(p=>p.name!==saved)]:PROVIDERS;
+  for(const p of list){
+    const n=await ask(inc?p.up(key):p.get(key));
+    if(n!==null){ store.set('usi:prov',p.name); return n; }
+  }
+  return null;
+}
+
+const DAY=86400000;
+async function countView(first){
+  const el=document.getElementById('views'); if(!el) return;
+  const K=CFG.COUNTER_KEY;
+  const lastUniq=store.get('usi:uniq-at',0);
+  const isNewUniq=!!first&&(Date.now()-lastUniq>DAY);
+  // оба запроса параллельно — вдвое быстрее
+  const [total,uniq]=await Promise.all([
+    counter(K+'-views', !!first),
+    counter(K+'-uniq',  isNewUniq)
+  ]);
+  if(isNewUniq&&uniq!==null) store.set('usi:uniq-at',Date.now());
+
+  const f=n=>n===null?'—':Number(n).toLocaleString('ru-RU');
+  const t=new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  if(total===null&&uniq===null){
+    const seen=store.get('usi:local-views',0)+(first?1:0);
+    if(first) store.set('usi:local-views',seen);
+    el.innerHTML='Открытий на этом устройстве: <i>'+seen+'</i>'
+      +' <b class="upd" title="Сервис счётчика сейчас недоступен, показан локальный подсчёт">локально</b>';
+    return;
+  }
+  el.innerHTML='Уникальных посетителей: <i>'+f(uniq)+'</i> · всего просмотров: <i>'+f(total)
+    +'</i> <b class="upd" title="Обновляется каждые '+CFG.REFRESH_MIN+' мин">обновлено '+t+'</b>';
 }
 let viewsTimer=null;
 function scheduleViews(){clearInterval(viewsTimer);viewsTimer=setInterval(()=>countView(false),CFG.REFRESH_MIN*60*1000);}
@@ -716,46 +889,7 @@ function modal(title,html){
 document.getElementById('modal-x').onclick=()=>document.getElementById('modal').hidden=true;
 document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.hidden=true;};
 
-/* ---------- Статистика кликов ---------- */
-document.getElementById('stat').onclick=()=>{
-  const rows=Object.entries(CLICKS).sort((a,b)=>b[1]-a[1]);
-  if(!rows.length) return modal('Статистика кликов',
-    '<p class="muted">Пока никто ничего не открывал с этого устройства. Счётчик заполнится по мере работы.</p>');
-  const max=rows[0][1];
-  const list=rows.slice(0,40).map(([k,v])=>{
-    const [ctx,nm]=[k.split('|')[0],k.split('|')[1]];
-    return '<tr><td><b>'+esc(nm)+'</b><br><span class="muted">'+esc(ctx)+'</span></td>'
-      +'<td><span class="bar" style="width:'+Math.round(v/max*70+6)+'px"></span>'+v+'</td></tr>';
-  }).join('');
-  modal('Статистика кликов',
-    '<p class="muted">Учитываются открытия материалов на этом устройстве. Всего кликов: '
-    +rows.reduce((a,b)=>a+b[1],0)+'.</p><table>'+list+'</table>'
-    +'<p class="muted" style="margin-top:12px"><button class="refresh" onclick="localStorage.removeItem(\'usi:clicks\');location.reload()">Сбросить статистику</button></p>');
-};
 
-/* ---------- Проверка ссылок ---------- */
-document.getElementById('check').onclick=async()=>{
-  const items=DATA.flatMap(s=>s.cards.flatMap(c=>c.items));
-  const noUrl=items.filter(i=>!i.url);
-  const urls=items.filter(i=>i.url);
-  const seen={},dup=[];
-  urls.forEach(i=>{ if(seen[i.url]) dup.push([seen[i.url],i]); else seen[i.url]=i; });
-  const bad=urls.filter(i=>!/^https:\/\//.test(i.url));
-  const google=urls.filter(i=>/drive\.google|docs\.google/.test(i.url));
-  let html='<p class="muted">Проверка выполняется по составу таблицы. Доступность файлов браузер проверить не может — чужие домены это запрещают, для полной проверки используйте скрипт <b>check_links.py</b>.</p><table>';
-  html+='<tr><td>Всего материалов</td><td>'+items.length+'</td></tr>';
-  html+='<tr><td>Со ссылкой</td><td class="ok">'+urls.length+'</td></tr>';
-  html+='<tr><td>Без ссылки</td><td class="'+(noUrl.length?'bad':'ok')+'">'+noUrl.length+'</td></tr>';
-  html+='<tr><td>Не https</td><td class="'+(bad.length?'bad':'ok')+'">'+bad.length+'</td></tr>';
-  html+='<tr><td>Дубли ссылок</td><td class="'+(dup.length?'bad':'ok')+'">'+dup.length+'</td></tr>';
-  html+='<tr><td>На Google Диске<br><span class="muted">из России открываются нестабильно</span></td><td>'+google.length+'</td></tr>';
-  html+='</table>';
-  if(noUrl.length) html+='<p class="muted" style="margin-top:12px"><b>Без ссылки:</b><br>'
-    +noUrl.map(i=>esc((i.sec||'')+' — '+i.name)).join('<br>')+'</p>';
-  if(dup.length) html+='<p class="muted" style="margin-top:12px"><b>Дубли:</b><br>'
-    +dup.map(p=>esc(p[0].name+' = '+p[1].name)).join('<br>')+'</p>';
-  modal('Проверка ссылок',html);
-};
 
 /* ---------- Поиск и горячие клавиши ---------- */
 qInput.addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
