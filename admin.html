@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Админка реестра — ЮСИ</title>
+<style>
+:root{--blue-900:#0F2A6B;--blue-700:#1B45B8;--blue-500:#2D63E6;--blue-100:#E6EDFD;--blue-050:#F2F6FF;
+  --bg:#F4F7FC;--card:#fff;--ink:#12203F;--ink-soft:#5C6B8A;--line:#E2E9F5;--radius:14px;--pill:999px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+  font:14px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+header{background:linear-gradient(180deg,#153AA8,#2049C6);color:#fff;padding:16px 20px}
+header h1{margin:0;font-size:19px;font-weight:800}
+header p{margin:4px 0 0;font-size:12.5px;color:#C3D2FA}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 20px 60px}
+.bar{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px;
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+button{border:1.5px solid var(--line);background:#fff;border-radius:var(--pill);padding:7px 15px;
+  font:inherit;font-size:13px;font-weight:700;color:var(--blue-700);cursor:pointer;transition:.15s}
+button:hover{border-color:var(--blue-500)}
+button.primary{background:var(--blue-700);border-color:var(--blue-700);color:#fff}
+button.primary:hover{background:var(--blue-500)}
+button.mini{padding:3px 9px;font-size:11.5px;color:var(--ink-soft)}
+.hint{font-size:12px;color:var(--ink-soft);margin-left:auto}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden}
+th{background:var(--blue-050);text-align:left;font-size:11.5px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--ink-soft);padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.sec td{background:#EEF3FE;font-weight:800}
+textarea,input{width:100%;border:1px solid var(--line);border-radius:9px;padding:6px 8px;
+  font:inherit;font-size:12.5px;resize:vertical;background:#fff;color:var(--ink)}
+textarea:focus,input:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(45,99,230,.12)}
+td.acts{width:80px;white-space:nowrap;text-align:right}
+.tools{display:flex;gap:4px;justify-content:flex-end}
+.note{background:#FFF9E6;border:1px solid #F3E2AE;border-radius:var(--radius);padding:12px;
+  font-size:12.5px;color:#7A5B00;margin-bottom:14px}
+.note b{color:#5C4400}
+</style>
+</head>
+<body>
+<header>
+  <h1>Админка реестра материалов</h1>
+  <p>Редактирование без Google Таблиц. Правки сохраняются в файл <b>data.csv</b>.</p>
+</header>
+
+<div class="wrap">
+  <div class="note">
+    Страница работает в браузере и ничего никуда не отправляет. Порядок работы: <b>загрузить data.csv</b> →
+    отредактировать → <b>скачать data.csv</b> → положить рядом с index.html на хостинге.
+    Чтобы сайт брал данные из этого файла, а не из Google, очистите в index.html поля <b>SHEET_ID</b> и <b>PUB_CSV</b>.
+  </div>
+
+  <div class="bar">
+    <button class="primary" id="load">Загрузить data.csv</button>
+    <input type="file" id="file" accept=".csv" hidden>
+    <button id="fromSheet">Взять из Google Таблицы</button>
+    <button id="addSec">+ Раздел</button>
+    <button id="addRow">+ Строка</button>
+    <button class="primary" id="save">Скачать data.csv</button>
+    <span class="hint" id="stat">Данные не загружены</span>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:26%">ЖК / раздел</th><th>Материалы и ссылки</th>
+    <th style="width:15%">Дата обновления</th><th></th></tr></thead>
+    <tbody id="tb"></tbody>
+  </table>
+</div>
+
+<script>
+const SHEET_ID="1nOhQsrg-r4tE1VWGQIVfX4YdRHY28L7yKaseoymblag", GID="0";
+let ROWS=[];
+
+function parseCSV(text){
+  const rows=[];let row=[],val='',q=false;
+  text=text.replace(/^\uFEFF/,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  for(let i=0;i<text.length;i++){const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){val+='"';i++;} else q=false; } else val+=ch; }
+    else{ if(ch==='"')q=true;
+      else if(ch===','){row.push(val);val='';}
+      else if(ch==='\n'){row.push(val);rows.push(row);row=[];val='';}
+      else val+=ch; }}
+  row.push(val); if(row.some(c=>c!==''))rows.push(row);
+  return rows.map(r=>[r[0]||'',r[1]||'',r[2]||'']);
+}
+const q=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
+const toCSV=()=>'\uFEFF'+ROWS.map(r=>r.map(q).join(',')).join('\n');
+
+function isSec(r){ return r[0] && !r[1]; }
+
+function render(){
+  const tb=document.getElementById('tb'); tb.innerHTML='';
+  ROWS.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    if(isSec(r)) tr.className='sec';
+    tr.innerHTML=
+      '<td><input value="'+esc(r[0])+'" data-i="'+i+'" data-c="0" placeholder="Название ЖК или раздела"></td>'+
+      '<td><textarea rows="'+Math.max(1,(r[1].match(/\n/g)||[]).length+1)+'" data-i="'+i+'" data-c="1" '+
+      'placeholder="Подпись и ссылка, каждая с новой строки">'+esc(r[1])+'</textarea></td>'+
+      '<td><input value="'+esc(r[2])+'" data-i="'+i+'" data-c="2" placeholder="14.01.2026 10:30"></td>'+
+      '<td class="acts"><div class="tools">'+
+        '<button class="mini" data-up="'+i+'" title="Выше">↑</button>'+
+        '<button class="mini" data-dn="'+i+'" title="Ниже">↓</button>'+
+        '<button class="mini" data-del="'+i+'" title="Удалить">✕</button>'+
+      '</div></td>';
+    tb.appendChild(tr);
+  });
+  const links=ROWS.reduce((a,r)=>a+((r[1].match(/https?:\/\//g)||[]).length),0);
+  document.getElementById('stat').textContent=
+    'Строк: '+ROWS.length+' · разделов: '+ROWS.filter(isSec).length+' · ссылок: '+links;
+}
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.addEventListener('input',e=>{
+  const t=e.target; if(t.dataset.i===undefined) return;
+  ROWS[+t.dataset.i][+t.dataset.c]=t.value;
+  const links=ROWS.reduce((a,r)=>a+((r[1].match(/https?:\/\//g)||[]).length),0);
+  document.getElementById('stat').textContent=
+    'Строк: '+ROWS.length+' · разделов: '+ROWS.filter(isSec).length+' · ссылок: '+links;
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.del!==undefined){ ROWS.splice(+b.dataset.del,1); render(); }
+  if(b.dataset.up!==undefined){ const i=+b.dataset.up; if(i>0){[ROWS[i-1],ROWS[i]]=[ROWS[i],ROWS[i-1]];render();} }
+  if(b.dataset.dn!==undefined){ const i=+b.dataset.dn; if(i<ROWS.length-1){[ROWS[i+1],ROWS[i]]=[ROWS[i],ROWS[i+1]];render();} }
+});
+
+document.getElementById('load').onclick=()=>document.getElementById('file').click();
+document.getElementById('file').onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ROWS=parseCSV(r.result);render();};
+  r.readAsText(f,'utf-8');
+};
+document.getElementById('fromSheet').onclick=async()=>{
+  try{
+    const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv&gid='+GID+'&t='+Date.now();
+    const t=await (await fetch(url,{cache:'no-store'})).text();
+    ROWS=parseCSV(t); render();
+  }catch(err){ alert('Не удалось прочитать таблицу. Проверьте доступ по ссылке или загрузите CSV файлом.'); }
+};
+document.getElementById('addSec').onclick=()=>{ROWS.push(['Новый раздел:','','']);render();window.scrollTo(0,document.body.scrollHeight);};
+document.getElementById('addRow').onclick=()=>{ROWS.push(['','','']);render();window.scrollTo(0,document.body.scrollHeight);};
+document.getElementById('save').onclick=()=>{
+  const blob=new Blob([toCSV()],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='data.csv'; a.click();
+  URL.revokeObjectURL(a.href);
+};
+render();
+</script>
+</body>
+</html>
