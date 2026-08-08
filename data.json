@@ -1,0 +1,984 @@
+{
+ "version": 1,
+ "updated": "2026-08-08T06:22:40.280Z",
+ "sections": [
+  {
+   "id": "s1",
+   "title": "Буклеты",
+   "groups": [
+    {
+     "id": "g2",
+     "title": "КВАРТИРЫ С РЕМОНТОМ",
+     "items": [
+      {
+       "id": "i3",
+       "name": "Материал",
+       "url": "https://drive.google.com/file/d/1Bpn7YCHAM6Yv8EEPr3zoyIxfpqo1jozs/view",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g4",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i5",
+       "name": "5 литер",
+       "url": "https://disk.yandex.ru/i/z1Z8oKtVWZEuAQ",
+       "updated": ""
+      },
+      {
+       "id": "i6",
+       "name": "4 литер",
+       "url": "https://disk.yandex.ru/i/mHGOaSv5O5lOow",
+       "updated": ""
+      },
+      {
+       "id": "i7",
+       "name": "2 литер",
+       "url": "https://disk.yandex.ru/i/n7atvVUHlOxpHw",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g8",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i9",
+       "name": "3 кластер",
+       "url": "https://disk.yandex.ru/i/nKhgr6CU4uXVDw",
+       "updated": ""
+      },
+      {
+       "id": "i10",
+       "name": "1 кластер",
+       "url": "https://disk.yandex.ru/i/0rOxJhosC24lkw",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g11",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i12",
+       "name": "24/1 литер",
+       "url": "https://disk.yandex.ru/i/LqDlJ3HcLEOIgg",
+       "updated": ""
+      },
+      {
+       "id": "i13",
+       "name": "15 кластер",
+       "url": "https://drive.google.com/file/d/165mPUp6GMRXaxVp2eDrzXuG4xGB_RwfE/view",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g14",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i15",
+       "name": "69 кластер",
+       "url": "https://disk.yandex.ru/i/ISLH_72gJZewEQ",
+       "updated": ""
+      },
+      {
+       "id": "i16",
+       "name": "78 кластер",
+       "url": "https://drive.google.com/file/d/16W3YJbydNXbmV3O7JdlOzZw22dvEJgKN/view",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g17",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i18",
+       "name": "49 кластер",
+       "url": "https://drive.google.com/file/d/1qhicmvcPaSMmFTVB5zq5tVIW_y5cB15H/view",
+       "updated": ""
+      },
+      {
+       "id": "i19",
+       "name": "48 кластер",
+       "url": "https://drive.google.com/file/d/1_XENCwjwht6nEn7rnkRLAq8igUX5dDuO/view",
+       "updated": ""
+      },
+      {
+       "id": "i20",
+       "name": "47 кластер",
+       "url": "https://disk.yandex.ru/i/4Wjt6JlszdSSUg",
+       "updated": ""
+      },
+      {
+       "id": "i21",
+       "name": "46 кластер",
+       "url": "https://drive.google.com/file/d/15vRMwHMcsseX2CvksGGiAc0P6_KyYREZ/view",
+       "updated": ""
+      },
+      {
+       "id": "i22",
+       "name": "45 кластер",
+       "url": "https://disk.yandex.ru/i/AVuGEE5XZvAsZQ",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s23",
+   "title": "Мобильные буклеты",
+   "groups": [
+    {
+     "id": "g24",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i25",
+       "name": "49 кластер",
+       "url": "https://drive.google.com/file/d/1qhicmvcPaSMmFTVB5zq5tVIW_y5cB15H/view",
+       "updated": ""
+      },
+      {
+       "id": "i26",
+       "name": "48 кластер",
+       "url": "https://drive.google.com/file/d/1_XENCwjwht6nEn7rnkRLAq8igUX5dDuO/view",
+       "updated": ""
+      },
+      {
+       "id": "i27",
+       "name": "47 кластер",
+       "url": "https://disk.yandex.ru/i/4Wjt6JlszdSSUg",
+       "updated": ""
+      },
+      {
+       "id": "i28",
+       "name": "46 кластер",
+       "url": "https://drive.google.com/file/d/15vRMwHMcsseX2CvksGGiAc0P6_KyYREZ/view",
+       "updated": ""
+      },
+      {
+       "id": "i29",
+       "name": "45 кластер",
+       "url": "https://disk.yandex.ru/i/AVuGEE5XZvAsZQ",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s30",
+   "title": "Генпланы А3",
+   "groups": [
+    {
+     "id": "g31",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i32",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/zu12tWOFwyu_Mw",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g33",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i34",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/QtUeFN4M-NFk9A",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g35",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i36",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/LeRHb3jOl-g0lA",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g37",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i38",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/_pcwY_jbczAGlA",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g39",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i40",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/JakqmTe-vvAFCQ",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g41",
+     "title": "Новый Ростов",
+     "items": [
+      {
+       "id": "i42",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/zdAAlZI8hQ1aLA",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s43",
+   "title": "ПДФ Рендеры А3",
+   "groups": [
+    {
+     "id": "g44",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i45",
+       "name": "24/1 литер",
+       "url": "https://disk.yandex.ru/i/9CEClF3YTK5c1g",
+       "updated": ""
+      },
+      {
+       "id": "i46",
+       "name": "15 кластер",
+       "url": "https://disk.yandex.ru/d/MQ8vm7xbc45YZw",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g47",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i48",
+       "name": "69 кластер",
+       "url": "https://disk.yandex.ru/i/ThTLrVRHqSO4pg",
+       "updated": ""
+      },
+      {
+       "id": "i49",
+       "name": "78 кластер",
+       "url": "",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g50",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i51",
+       "name": "49 кластер",
+       "url": "https://disk.yandex.ru/i/OV3vrwSps06bTw",
+       "updated": ""
+      },
+      {
+       "id": "i52",
+       "name": "48 кластер",
+       "url": "https://disk.yandex.ru/i/BAIfYyNIk9zFLA",
+       "updated": ""
+      },
+      {
+       "id": "i53",
+       "name": "47 кластер",
+       "url": "https://disk.yandex.ru/i/j8xsEwfPiTlUWw",
+       "updated": ""
+      },
+      {
+       "id": "i54",
+       "name": "46 кластер",
+       "url": "https://disk.yandex.ru/d/-Gp6J-LvWDiS2A",
+       "updated": ""
+      },
+      {
+       "id": "i55",
+       "name": "45 кластер",
+       "url": "https://disk.yandex.ru/i/QRqVqlW0-Nrw7Q",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s56",
+   "title": "Планировки",
+   "groups": [
+    {
+     "id": "g57",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i58",
+       "name": "5 литер",
+       "url": "https://drive.google.com/drive/folders/1qRePj54uMJmXfdmH9z7Iy8ZEHIRYoDmU",
+       "updated": ""
+      },
+      {
+       "id": "i59",
+       "name": "4 литер",
+       "url": "https://drive.google.com/drive/folders/1wxeOOpS-F91deVGl5cI-cu43ALVFjJn8",
+       "updated": ""
+      },
+      {
+       "id": "i60",
+       "name": "2 литер",
+       "url": "https://drive.google.com/drive/folders/1AN5QxStxtKro-mv04i14RfEocD86hl9N",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g61",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i62",
+       "name": "3 кластер",
+       "url": "https://drive.google.com/drive/folders/1p67uyivydJBF9xj3cZe_hxrpnMOg1STn",
+       "updated": ""
+      },
+      {
+       "id": "i63",
+       "name": "1 кластер",
+       "url": "https://drive.google.com/drive/folders/1eirhVuD2-XxPtw0jOqeWC3Z57sO8V9h4",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g64",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i65",
+       "name": "24/1 литер",
+       "url": "https://drive.google.com/drive/folders/1XlG3vSXjE0N9FPWgnEZ5AOj6DZx9IL7j",
+       "updated": ""
+      },
+      {
+       "id": "i66",
+       "name": "18/1 литер",
+       "url": "https://drive.google.com/drive/folders/15jnJ3NOk0XH0tm6DHWMe9g3fi-Oj6d-r",
+       "updated": ""
+      },
+      {
+       "id": "i67",
+       "name": "15 кластер",
+       "url": "https://drive.google.com/drive/folders/1i11hc_brCYr0bKIZydTF2KlmVIrQ244b",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g68",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i69",
+       "name": "69 кластер",
+       "url": "https://drive.google.com/drive/folders/1_nS0Jfw0gI2YpaNUP9smxloTq0yB-EaR",
+       "updated": ""
+      },
+      {
+       "id": "i70",
+       "name": "78 кластер",
+       "url": "https://drive.google.com/drive/folders/1OHOy0_8Fv9G0rvt1bhFS-FvkVUxftRiW",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g71",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i72",
+       "name": "49 кластер",
+       "url": "https://drive.google.com/drive/folders/1R51hRO1MWfmNGNsNI43T0377DS5hmwTa",
+       "updated": ""
+      },
+      {
+       "id": "i73",
+       "name": "48 кластер",
+       "url": "https://drive.google.com/drive/folders/1Q8VmQ-OgxfeA9KtLyYjXEHC47KaGOKeQ",
+       "updated": ""
+      },
+      {
+       "id": "i74",
+       "name": "47 кластер",
+       "url": "https://drive.google.com/drive/folders/1NclS7t_yhXM1XR6Yb2ySoHyDxQ76P6A2",
+       "updated": ""
+      },
+      {
+       "id": "i75",
+       "name": "46 кластер",
+       "url": "https://drive.google.com/drive/folders/1ClZkCdxVAn7ausrTCzRQtBvzYgRRDumQ",
+       "updated": ""
+      },
+      {
+       "id": "i76",
+       "name": "45 кластер",
+       "url": "https://drive.google.com/drive/folders/1zNBA2W_wm4NGevODLvy1o-dVsznuUccU",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s77",
+   "title": "Дизайн проекты",
+   "groups": [
+    {
+     "id": "g78",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i79",
+       "name": "4 литер",
+       "url": "https://disk.yandex.ru/d/C5QncIUTALrjdg",
+       "updated": ""
+      },
+      {
+       "id": "i80",
+       "name": "2 литер",
+       "url": "https://disk.yandex.ru/d/MPW0yxpSHmft1A",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g81",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i82",
+       "name": "1 кластер",
+       "url": "https://disk.yandex.ru/d/mhAaSy_U2RTEcQ",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g83",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i84",
+       "name": "24/1 литер",
+       "url": "https://drive.google.com/drive/folders/1lLB6ptS08yexFXrPfczBji5BjboRYsM0",
+       "updated": ""
+      },
+      {
+       "id": "i85",
+       "name": "15 литер",
+       "url": "",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g86",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i87",
+       "name": "69 кластер",
+       "url": "https://drive.google.com/drive/folders/1A3a3P6GKvWaGiyNnhRyylv4WaC_p6-tW",
+       "updated": ""
+      },
+      {
+       "id": "i88",
+       "name": "78 кластер",
+       "url": "https://drive.google.com/drive/folders/1NOrTLJVWp2Pc4RXxfhDeFWSAPL5W5RMs",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g89",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i90",
+       "name": "45/1",
+       "url": "https://drive.google.com/drive/folders/1iOFDHW5nGQ9Oj_2XIwpdoRQg-qBHeBp4",
+       "updated": ""
+      },
+      {
+       "id": "i91",
+       "name": "45/2",
+       "url": "https://drive.google.com/drive/folders/1JPpNdwl-2ol3ICiOO0yp44FeZ2N1ysc3",
+       "updated": ""
+      },
+      {
+       "id": "i92",
+       "name": "46/1",
+       "url": "https://drive.google.com/drive/folders/1wmwUxZFcXrm1cSYZpPuLxcAKgd86K3S1",
+       "updated": ""
+      },
+      {
+       "id": "i93",
+       "name": "46/2",
+       "url": "https://drive.google.com/drive/folders/1bnH6gvEIzjYHkGiLDN6365MpF5-X4xeJ",
+       "updated": ""
+      },
+      {
+       "id": "i94",
+       "name": "47/1",
+       "url": "https://drive.google.com/drive/folders/1i4B2jnHGV_VERfak1i1F6t69ltqnPJIM",
+       "updated": ""
+      },
+      {
+       "id": "i95",
+       "name": "47/2",
+       "url": "https://drive.google.com/drive/folders/1s_kiHPUMC7yACZAOq7aNxdj_YPZtVhIt",
+       "updated": ""
+      },
+      {
+       "id": "i96",
+       "name": "48/1",
+       "url": "https://drive.google.com/drive/folders/1zP4vCn2eALD1F1Cq3Pi5TNDnSm_qcYRk",
+       "updated": ""
+      },
+      {
+       "id": "i97",
+       "name": "48/2",
+       "url": "https://drive.google.com/drive/folders/1yuHReAu44w0xGo1tSUg0fcrYgEnCNhya",
+       "updated": ""
+      },
+      {
+       "id": "i98",
+       "name": "49/1",
+       "url": "https://drive.google.com/drive/folders/1wW2UcTWgSZZLEGWV9H9CKmyygg7lbclA",
+       "updated": ""
+      },
+      {
+       "id": "i99",
+       "name": "49/2",
+       "url": "https://drive.google.com/drive/folders/1_9iMNHICnSwW0ZB-M0SUFdeDbxwPSdTV",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s100",
+   "title": "Архитектурная подсветка",
+   "groups": [
+    {
+     "id": "g101",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i102",
+       "name": "2 литер",
+       "url": "https://drive.google.com/file/d/1J-yMRSgjHx_j0XTvT19gVkVmES73W40S/view",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g103",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i104",
+       "name": "1 кластер",
+       "url": "https://drive.google.com/file/d/12fjsHGs9wZRKkbwmc8nhnBuqsFIddoEA/view",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g105",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i106",
+       "name": "69 кластер",
+       "url": "https://drive.google.com/file/d/1T7u7-5gtfMx8aNTFut8wa1yhFubGZ0BG/view",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g107",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i108",
+       "name": "45 кластер",
+       "url": "https://drive.google.com/file/d/129WN5hQTvnRzj2_IjGm7cnCwF5udJ5_7/view",
+       "updated": ""
+      },
+      {
+       "id": "i109",
+       "name": "48 кластер",
+       "url": "https://drive.google.com/file/d/1eo4Why9fmmfWGXkivpBBW6mgNVb3B39v/view",
+       "updated": ""
+      },
+      {
+       "id": "i110",
+       "name": "42 кластер",
+       "url": "https://drive.google.com/file/d/15gcBLnEX-hv_6U2xVaHd5Ijm8MIwOwpf/view",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s111",
+   "title": "Коммерция",
+   "groups": [
+    {
+     "id": "g112",
+     "title": "Коммерция",
+     "items": [
+      {
+       "id": "i113",
+       "name": "общий буклет",
+       "url": "https://disk.yandex.ru/i/TUuXs2sc9FDMmQ",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g114",
+     "title": "Планировки по всем ЖК",
+     "items": [
+      {
+       "id": "i115",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/fL6IRPAI6DZbhA",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g116",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i117",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/aemHN47W3y6M9A",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g118",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i119",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/80znj1PlNTzp_w",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g120",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i121",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/J7n8CEF58xKphg",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g122",
+     "title": "Квартал61",
+     "items": [
+      {
+       "id": "i123",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/1Au0URpHsTbOoQ",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g124",
+     "title": "Персона",
+     "items": [
+      {
+       "id": "i125",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/Wx_Mh5ZHLYcAEw",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s126",
+   "title": "Фото сданных домов",
+   "groups": [
+    {
+     "id": "g127",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i128",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/bvORR-vY5vuRlw",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g129",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i130",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/qnZQ2KEHq8lObg",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g131",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i132",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/LYqDXFJb3_i_eQ",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g133",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i134",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/4Xw0QPOiMU_hZg",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g135",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i136",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/PMDirUT1gXyByw",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g137",
+     "title": "Архитектурная съёмка — ЛБ, SP, Сияние",
+     "items": [
+      {
+       "id": "i138",
+       "name": "Материал",
+       "url": "https://disk.360.yandex.ru/d/yiMubWPcmEcI5w",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s139",
+   "title": "Видео сданных домов",
+   "groups": [
+    {
+     "id": "g140",
+     "title": "Левобережье",
+     "items": [
+      {
+       "id": "i141",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/yQmipcMuSeWy5w",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g142",
+     "title": "Smartpolet",
+     "items": [
+      {
+       "id": "i143",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/Pb8NRN7lLKwIZA",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g144",
+     "title": "Сияние",
+     "items": [
+      {
+       "id": "i145",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/1dkhFGzyluKHNg",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g146",
+     "title": "Движение61",
+     "items": [
+      {
+       "id": "i147",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/Gi6tCuNNAXu8tQ",
+       "updated": ""
+      }
+     ]
+    },
+    {
+     "id": "g148",
+     "title": "Эстет",
+     "items": [
+      {
+       "id": "i149",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/i/N9lnD776yO44kQ",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s150",
+   "title": "Обзорные ролики",
+   "groups": [
+    {
+     "id": "g151",
+     "title": "Общая ссылка по всем ЖК",
+     "items": [
+      {
+       "id": "i152",
+       "name": "Материал",
+       "url": "https://disk.yandex.ru/d/SxTu2EcvgV9bPg",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s153",
+   "title": "Дизайн-код по всем проектам (папка)",
+   "groups": [
+    {
+     "id": "g154",
+     "title": "Все ЖК",
+     "items": [
+      {
+       "id": "i155",
+       "name": "Материал",
+       "url": "https://drive.google.com/drive/folders/1w1VY9Tdf4XrSXyawP9sXX8_oJCt5WUGo",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s156",
+   "title": "Живые фото/видео ремонт Сияние",
+   "groups": [
+    {
+     "id": "g157",
+     "title": "Фото",
+     "items": [
+      {
+       "id": "i158",
+       "name": "Вариант 1",
+       "url": "https://disk.yandex.ru/d/6oG-K6nfekpc0w",
+       "updated": ""
+      },
+      {
+       "id": "i159",
+       "name": "Вариант 2",
+       "url": "https://disk.yandex.ru/d/jVdSHZj8g223eQ",
+       "updated": ""
+      },
+      {
+       "id": "i160",
+       "name": "Вариант 3",
+       "url": "https://disk.yandex.ru/d/h-W2mfKpMBhd5Q",
+       "updated": ""
+      },
+      {
+       "id": "i161",
+       "name": "Вариант 4",
+       "url": "https://disk.yandex.ru/d/SZArzdWsPo51cA",
+       "updated": ""
+      },
+      {
+       "id": "i162",
+       "name": "Вариант 5",
+       "url": "https://disk.yandex.ru/d/CmnzddMunEYmig",
+       "updated": ""
+      },
+      {
+       "id": "i163",
+       "name": "Вариант 8",
+       "url": "https://disk.yandex.ru/d/1bk0W6gbTgKyGg",
+       "updated": ""
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

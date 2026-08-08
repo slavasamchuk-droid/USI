@@ -1,7 +1,7 @@
 /* Офлайн-режим реестра ЮСИ.
    Меняя index.html, увеличьте номер версии — иначе браузер отдаст старую копию. */
-const V='usi-v5';
-const CORE=['./','./index.html','./data.csv','./manifest.webmanifest',
+const V='usi-v6';
+const CORE=['./','./index.html','./data.json','./manifest.webmanifest',
             './icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',e=>{
@@ -14,8 +14,15 @@ self.addEventListener('activate',e=>{
 self.addEventListener('fetch',e=>{
   const url=new URL(e.request.url);
   if(e.request.method!=='GET') return;
-  // данные и счётчики — только из сети, без кэша
-  if(/docs\.google|counterapi|countapi/.test(url.href)) return;
+  // счётчики — мимо кэша
+  if(/counterapi|countapi/.test(url.href)) return;
+  // данные реестра: всегда сеть, кэш только как аварийный запас
+  if(url.pathname.endsWith('data.json')){
+    e.respondWith(fetch(e.request).then(r=>{
+      const copy=r.clone(); caches.open(V).then(c=>c.put(e.request,copy)); return r;
+    }).catch(()=>caches.match(e.request)));
+    return;
+  }
   // свои файлы: сначала сеть, при отказе — кэш
   if(url.origin===location.origin){
     e.respondWith(
