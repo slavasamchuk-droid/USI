@@ -1,6 +1,6 @@
 /* Офлайн-режим реестра ЮСИ.
    Меняя index.html, увеличьте номер версии — иначе браузер отдаст старую копию. */
-const V='usi-v6';
+const V='usi-v7';
 const CORE=['./','./index.html','./data.json','./manifest.webmanifest',
             './icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 

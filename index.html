@@ -92,7 +92,10 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
   padding:12px 14px 6px;transition:.18s}
 .card:hover{border-color:#C9D8F6;box-shadow:0 10px 26px rgba(15,42,107,.07)}
 .card h3{margin:0 0 8px;font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--blue-500);flex:none}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--blue-500);flex:none;transition:background .3s}
+.dot.is-new{background:#E53535;box-shadow:0 0 0 3px rgba(229,53,53,.22);animation:pulse-new 1.8s ease-in-out infinite}
+@keyframes pulse-new{0%,100%{box-shadow:0 0 0 3px rgba(229,53,53,.22)}50%{box-shadow:0 0 0 6px rgba(229,53,53,.10)}}
+.lbl-new{font-size:10px;font-weight:800;color:#E53535;letter-spacing:.4px;margin-left:4px;text-transform:uppercase;vertical-align:middle}
 
 .row{display:flex;align-items:center;gap:10px;justify-content:space-between;
   padding:5px 0;border-top:1px solid var(--line)}
@@ -151,7 +154,6 @@ h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 3px}
 
 /* --- избранное и «новое» --- */
 .section.pin .card{border-color:#F0DCA8;background:#FFFDF7}
-.section.new .card{border-color:#C3D6FA;background:#F8FAFF}
 
 /* --- модальное окно --- */
 .modal{position:fixed;inset:0;background:rgba(10,25,60,.55);display:flex;
@@ -570,7 +572,6 @@ function itemHTML(it){
     +'<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></button>';
   const isNew = SEEN && !SEEN.includes(k);
   return '<div class="row"><div class="row-main"><div class="row-name">'+typeTag(it)
-    +(isNew?'<span class="tag new">новое</span>':'')
     +'<span>'+esc(it.name)+'</span>'+(cl?'<span class="clicks">'+cl+'</span>':'')
     +'</div></div><div class="row-acts">'+star+qr+copy+btn+'</div></div>';
 }
@@ -582,7 +583,10 @@ function matches(it){
   return query.split(/\s+/).every(w=>hay.includes(w));
 }
 function cardHTML(jk,items){
-  return '<article class="card"><h3><span class="dot"></span>'+esc(jk)+'</h3>'+items.map(itemHTML).join('')+'</article>';
+  const hasNew=items.some(i=>SEEN&&!SEEN.includes(key(i)));
+  const dotCls=hasNew?' is-new':'';
+  const lblNew=hasNew?'<span class="lbl-new">new</span>':'';
+  return '<article class="card"><h3><span class="dot'+dotCls+'"></span>'+esc(jk)+lblNew+'</h3>'+items.map(itemHTML).join('')+'</article>';
 }
 function sectionHTML(title,cards,n,cls){
   return '<section class="section '+(cls||'')+'"><div class="section-head"><h2>'+esc(title)
@@ -597,11 +601,6 @@ function render(){
   if(active==='Все разделы'){
     const fav=all.filter(i=>FAV.includes(key(i))&&matches(i));
     if(fav.length){ html+=sectionHTML('★ Избранное',cardHTML('Ваши материалы',fav),fav.length,'pin'); }
-    // Новое
-    if(SEEN){
-      const nw=all.filter(i=>!SEEN.includes(key(i))&&matches(i));
-      if(nw.length) html+=sectionHTML('Новое',cardHTML('Добавлено с прошлого визита',nw),nw.length,'new');
-    }
   }
 
   DATA.forEach(sec=>{
