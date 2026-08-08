@@ -14,15 +14,10 @@ self.addEventListener('activate',e=>{
 self.addEventListener('fetch',e=>{
   const url=new URL(e.request.url);
   if(e.request.method!=='GET') return;
-  // счётчики — мимо кэша
-  if(/counterapi|countapi/.test(url.href)) return;
-  // данные реестра: всегда сеть, кэш только как аварийный запас
-  if(url.pathname.endsWith('data.json')){
-    e.respondWith(fetch(e.request).then(r=>{
-      const copy=r.clone(); caches.open(V).then(c=>c.put(e.request,copy)); return r;
-    }).catch(()=>caches.match(e.request)));
-    return;
-  }
+  // данные, счётчики и GitHub — только из сети, без кэша
+  if(/docs\.google|counterapi|countapi|api\.github\.com/.test(url.href)) return;
+  // редактор и сброс кэша не кэшируем: они всегда должны быть свежими
+  if(/admin\.html|reset\.html/.test(url.pathname)) return;
   // свои файлы: сначала сеть, при отказе — кэш
   if(url.origin===location.origin){
     e.respondWith(

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ЮСИ — обновить реестр</title>
+<meta name="theme-color" content="#153AA8">
+<style>
+body{margin:0;background:#F4F7FC;color:#16233D;
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.box{background:#fff;border:1px solid #E3E9F5;border-radius:16px;max-width:440px;width:100%;
+  padding:26px 24px;box-shadow:0 14px 40px rgba(12,30,69,.10)}
+h1{margin:0 0 8px;font-size:20px;color:#0F2A6B}
+p{margin:0 0 14px;color:#42557A;font-size:14px}
+button{width:100%;border:0;background:#2D63E6;color:#fff;border-radius:999px;
+  padding:13px 18px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
+button:hover{background:#1B45B8}
+button[disabled]{opacity:.55;cursor:not-allowed}
+.log{margin-top:14px;font-size:12.5px;color:#6B7A99;white-space:pre-line;min-height:20px}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>Обновить реестр</h1>
+  <p>Если ссылки, часы или разделы пропали — на устройстве осталась старая сохранённая копия
+     страницы. Нажмите кнопку: она удалит копию и откроет свежий реестр.</p>
+  <button id="go">Очистить и открыть реестр</button>
+  <div class="log" id="log"></div>
+</div>
+<script>
+const log=t=>{document.getElementById('log').textContent+=t+"\n"};
+document.getElementById('go').onclick=async()=>{
+  const b=document.getElementById('go'); b.disabled=true; b.textContent='Чищу…';
+  try{
+    if('serviceWorker' in navigator){
+      const rs=await navigator.serviceWorker.getRegistrations();
+      for(const r of rs){ await r.unregister(); }
+      log('Офлайн-режим отключён: '+rs.length);
+    }
+    if(window.caches){
+      const ks=await caches.keys();
+      for(const k of ks){ await caches.delete(k); }
+      log('Сохранённых копий удалено: '+ks.length);
+    }
+    try{ localStorage.removeItem('usi:seen-items'); }catch(e){}
+    log('Готово. Открываю реестр…');
+  }catch(e){ log('Не всё удалось очистить, но реестр всё равно откроется.'); }
+  setTimeout(()=>{ location.replace('index.html?fresh='+Date.now()); },1200);
+};
+</script>
+</body>
+</html>
