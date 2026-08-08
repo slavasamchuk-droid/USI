@@ -96,6 +96,27 @@ input,select,textarea,button{font:inherit;color:inherit}
 .note{background:#FFF7E8;border:1px solid #F0D6A6;border-radius:10px;padding:9px 11px;
   font-size:12px;color:#7A5400;margin-bottom:12px}
 
+/* ---------- вход ---------- */
+#gate{position:fixed;inset:0;background:linear-gradient(135deg,#0C1E45,#153AA8 60%,#1B45B8);
+  display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
+#gate .g{background:#fff;border-radius:16px;max-width:380px;width:100%;padding:26px 24px;
+  box-shadow:0 20px 60px rgba(12,30,69,.4)}
+#gate h2{margin:0 0 4px;font-size:19px;color:var(--navy)}
+#gate p{margin:0 0 16px;font-size:12.5px;color:var(--mut)}
+#gate .err{color:var(--bad);font-size:12.5px;min-height:18px;margin-top:8px}
+#app{display:none}
+#app.on{display:block}
+
+/* ---------- настройки ---------- */
+.setts{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 16px 14px;margin-top:22px}
+.setts h3{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.setts .sub{margin:0 0 14px;font-size:12.5px;color:var(--mut)}
+.setts .grid{display:flex;flex-wrap:wrap;gap:10px}
+.setts .fld{flex:1 1 180px;margin-bottom:0}
+.who{display:inline-block;background:var(--pale);color:var(--navy);border-radius:var(--pill);
+  padding:3px 10px;font-size:11.5px;font-weight:700;margin-left:6px}
+
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);
   color:#fff;padding:10px 18px;border-radius:var(--pill);font-size:13px;z-index:80;
   box-shadow:0 10px 30px rgba(12,30,69,.35);max-width:90vw;text-align:center}
@@ -108,6 +129,18 @@ input,select,textarea,button{font:inherit;color:inherit}
 </head>
 <body>
 
+<div id="gate">
+  <div class="g">
+    <h2>Редактор реестра ЮСИ</h2>
+    <p>Вход только для отдела маркетинга.</p>
+    <div class="fld"><label>Логин</label><input id="g-login" value="admin" autocomplete="username"></div>
+    <div class="fld"><label>Пароль</label><input id="g-pass" type="password" autocomplete="current-password"></div>
+    <div class="dlg-act"><button class="gbtn go" id="g-go">Войти</button></div>
+    <div class="err" id="g-err"></div>
+  </div>
+</div>
+
+<div id="app">
 <header class="top">
   <div class="top-in">
     <h1>Редактор реестра ЮСИ</h1>
@@ -131,6 +164,26 @@ input,select,textarea,button{font:inherit;color:inherit}
     <button class="gbtn go" id="b-addsec">+ Раздел</button>
   </div>
   <div id="tree"></div>
+</div>
+
+<div class="setts" id="setts">
+  <h3>Настройки доступа<span class="who" id="who"></span></h3>
+  <p class="sub">Новый пароль начнёт действовать у всех после нажатия «Опубликовать».
+     Пока не опубликуете — работает старый.</p>
+  <div class="grid">
+    <div class="fld" id="fld-old"><label>Текущий пароль</label><input id="s-old" type="password" autocomplete="off"></div>
+    <div class="fld"><label>Новый пароль</label><input id="s-new" type="password" autocomplete="off"></div>
+    <div class="fld"><label>Повторите новый</label><input id="s-new2" type="password" autocomplete="off"></div>
+  </div>
+  <div class="grid" style="margin-top:10px" id="row-login" hidden>
+    <div class="fld"><label>Логин для входа</label><input id="s-login" autocomplete="off"></div>
+  </div>
+  <div class="dlg-act" style="justify-content:flex-start">
+    <button class="gbtn go" id="s-save">Сменить пароль</button>
+    <button class="gbtn" id="s-out">Выйти</button>
+  </div>
+  <div class="hint" id="s-msg"></div>
+</div>
 </div>
 
 <div class="foot">
@@ -166,9 +219,12 @@ input,select,textarea,button{font:inherit;color:inherit}
 /* ================== НАСТРОЙКИ ================== */
 const CFG={
   FILE:'data.json',
-  // Замок от случайного захода. Пустая строка — вход без кода.
-  // Это не защита от взлома: файл лежит на сайте открыто.
-  PIN:'',
+  // ---- вход в редактор ----
+  // Логин и пароль по умолчанию, если в data.json ещё нет своих.
+  LOGIN:'admin',
+  PASS :'usi26',
+  // Главный пароль. Работает всегда и с любым логином, сменить нельзя.
+  MASTER:'0606',
   DEF:{owner:'slavasamchuk-droid',repo:'USIlinks',branch:'main'}
 };
 
@@ -215,9 +271,10 @@ async function loadFromSite(){
   }
 }
 function normalize(j){
-  return {
+  const out={
     version:1,
     updated:j.updated||'',
+    auth:(j.auth&&j.auth.hash)?{login:(j.auth.login||CFG.LOGIN).trim(),hash:String(j.auth.hash)}:null,
     sections:(j.sections||[]).map(s=>({
       title:(s.title||'').trim()||'Без названия',
       cards:(s.cards||[]).map(c=>({
@@ -230,6 +287,8 @@ function normalize(j){
       }))
     }))
   };
+  if(!out.auth) delete out.auth;
+  return out;
 }
 
 /* ================== ПОДСЧЁТ ================== */
@@ -473,24 +532,90 @@ $('#b-publish').onclick=async()=>{
   }finally{ btn.disabled=false; btn.textContent='Опубликовать'; }
 };
 
+/* ================== ВХОД И ПАРОЛИ ================== */
+let ROLE='';   // 'master' — главный пароль, 'user' — обычный вход
+
+/* Хэш пароля. Хранится в data.json — сам пароль нигде не лежит. */
+async function hash(pwd){
+  const txt='usi:'+pwd;
+  if(window.crypto && crypto.subtle && location.protocol!=='file:'){
+    const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(txt));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  // запасной путь, если браузер открыт с диска и crypto недоступен
+  let h1=0x811c9dc5,h2=0x1000193;
+  for(let i=0;i<txt.length;i++){ h1=(h1^txt.charCodeAt(i))>>>0; h1=(h1*16777619)>>>0;
+                                 h2=(h2+txt.charCodeAt(i)*(i+7))>>>0; }
+  return 'f'+h1.toString(16).padStart(8,'0')+h2.toString(16).padStart(8,'0');
+}
+function currentLogin(){ return (DATA.auth&&DATA.auth.login)||CFG.LOGIN; }
+
+async function tryLogin(login,pwd){
+  if(pwd===CFG.MASTER) return 'master';                 // главный пароль — всегда и поверх всего
+  if(login.trim().toLowerCase()!==currentLogin().toLowerCase()) return '';
+  const h=await hash(pwd);
+  if(DATA.auth&&DATA.auth.hash) return h===DATA.auth.hash?'user':'';
+  return pwd===CFG.PASS?'user':'';                       // пароль ещё не менялся
+}
+
+function openApp(role){
+  ROLE=role;
+  sessionStorage.setItem('usi:role',role);
+  $('#gate').style.display='none';
+  $('#app').classList.add('on');
+  $('#who').textContent = role==='master' ? 'главный доступ' : 'обычный доступ';
+  $('#fld-old').hidden   = (role==='master');            // главному старый пароль не нужен
+  $('#row-login').hidden = (role!=='master');            // логин меняет только главный
+  $('#s-login').value=currentLogin();
+  render();
+}
+
+$('#g-go').onclick=async()=>{
+  const l=$('#g-login').value, p=$('#g-pass').value;
+  const r=await tryLogin(l,p);
+  if(!r){ $('#g-err').textContent='Логин или пароль не подошли.'; $('#g-pass').value=''; return; }
+  $('#g-err').textContent=''; openApp(r);
+};
+$('#g-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#g-go').click(); });
+$('#g-login').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#g-pass').focus(); });
+
+/* ---------- смена пароля ---------- */
+$('#s-save').onclick=async()=>{
+  const msg=$('#s-msg'), n1=$('#s-new').value, n2=$('#s-new2').value;
+  msg.style.color='var(--bad)';
+  if(ROLE!=='master'){
+    const ok=await tryLogin(currentLogin(),$('#s-old').value);
+    if(ok!=='user'&&ok!=='master'){ msg.textContent='Текущий пароль указан неверно.'; return; }
+  }
+  if(n1.length<4){ msg.textContent='Новый пароль — минимум 4 знака.'; return; }
+  if(n1!==n2){ msg.textContent='Новые пароли не совпадают.'; return; }
+  if(n1===CFG.MASTER){ msg.textContent='Этот пароль занят системой, выберите другой.'; return; }
+
+  const login = (ROLE==='master' ? ($('#s-login').value.trim()||CFG.LOGIN) : currentLogin());
+  snap();
+  DATA.auth={login:login,hash:await hash(n1)};
+  $('#s-old').value=$('#s-new').value=$('#s-new2').value='';
+  msg.style.color='var(--ok)';
+  msg.textContent='Пароль изменён. Теперь нажмите «Опубликовать» — иначе у остальных останется старый.';
+  toast('Не забудьте опубликовать');
+};
+$('#s-out').onclick=()=>{
+  if(HIST.length && !confirm('Несохранённые правки пропадут. Выйти?')) return;
+  sessionStorage.removeItem('usi:role'); location.reload();
+};
+
 /* ================== СТАРТ ================== */
 (function(){
-  if(CFG.PIN){
-    const ok=sessionStorage.getItem('usi:pin')==='1';
-    if(!ok){
-      const v=prompt('Код доступа к редактору:');
-      if(v!==CFG.PIN){ document.body.innerHTML=
-        '<div style="max-width:420px;margin:80px auto;font:15px/1.5 var(--f);text-align:center;color:#16233D">'+
-        'Код не подошёл. Обновите страницу, чтобы попробовать снова.</div>'; return; }
-      sessionStorage.setItem('usi:pin','1');
-    }
-  }
   window.addEventListener('beforeunload',e=>{ if(HIST.length){e.preventDefault();e.returnValue='';} });
   document.addEventListener('keydown',e=>{
     if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();}
     if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();$('#b-download').click();}
   });
-  loadFromSite();
+  loadFromSite().then(()=>{
+    $('#g-login').value=currentLogin();
+    const r=sessionStorage.getItem('usi:role');
+    if(r) openApp(r); else $('#g-pass').focus();
+  });
 })();
 </script>
 </body>
