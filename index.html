@@ -568,7 +568,7 @@ function itemHTML(it){
     ? '<button class="icon js-copy" data-url="'+esc(it.url)+'" title="Скопировать ссылку" aria-label="Скопировать ссылку">'
       +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>' : '';
   const qr = it.url
-    ? '<button class="icon js-qr" data-url="'+esc(it.url)+'" data-n="'+esc(it.name)+'" title="QR-код для клиента" aria-label="QR-код">'
+    ? '<button class="icon js-qr" data-url="'+esc(it.url)+'" data-n="'+esc(it.name)+'" data-sec="'+esc(it.sec||'')+'" data-jk="'+esc(it.jk||'')+'" title="QR-код для клиента" aria-label="QR-код">'
       +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 19h2M19 14h2v2"/></svg></button>' : '';
   const star = '<button class="icon js-fav'+(fav?' on':'')+'" data-k="'+esc(k)+'" title="'+(fav?'Убрать из избранного':'В избранное')+'" aria-label="Избранное">'
     +'<svg width="15" height="15" viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></button>';
@@ -656,7 +656,7 @@ document.addEventListener('click',async e=>{
     toast(FAV.includes(k)?'Добавлено в избранное':'Убрано из избранного'); return;
   }
   const qb=e.target.closest('.js-qr');
-  if(qb){ showQR(qb.dataset.url,qb.dataset.n); return; }
+  if(qb){ showQR(qb.dataset.url,qb.dataset.n,qb.dataset.sec,qb.dataset.jk); return; }
   const op=e.target.closest('.btn[data-k]');
   if(op){ const k=op.dataset.k; CLICKS[k]=(CLICKS[k]||0)+1; store.set('usi:clicks',CLICKS); }
 });
@@ -770,7 +770,7 @@ function qrMake(text){
   return m.map(r=>r.map(v=>v?1:0));
 }
 
-function showQR(url,name){
+function showQR(url,name,sec,jk){
   const m=qrMake(url);
   let body;
   if(!m){ body='<p class="muted">Ссылка слишком длинная для QR-кода. Воспользуйтесь кнопкой копирования.</p>'; }
@@ -784,7 +784,16 @@ function showQR(url,name){
       +'<p class="muted">Наведите камеру телефона — материал откроется сразу.</p>'
       +'<p class="qr-url">'+esc(url)+'</p></div>';
   }
-  modal(name||'QR-код',body);
+  let sub='';
+  if(sec||jk){
+    const secTitle=(sec||'').split('/')[0].trim();
+    const jkTitle=(jk||'').trim();
+    const parts=[];
+    if(secTitle) parts.push(secTitle);
+    if(jkTitle&&jkTitle!==name) parts.push(jkTitle);
+    if(parts.length) sub='<div style="font-size:12px;color:#6B7A99;font-weight:600;margin:-8px 0 12px">'+esc(parts.join(' · '))+'</div>';
+  }
+  modal(name||'QR-код',sub+body);
 }
 
 /* ---------- Метрики и последнее обновление ---------- */
