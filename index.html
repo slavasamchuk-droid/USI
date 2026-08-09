@@ -538,6 +538,8 @@ let FAV=store.get('usi:fav',[]), CLICKS=store.get('usi:clicks',{}), SEEN=store.g
 
 const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const key=it=>(it.sec||'')+'|'+it.name;
+// ключ для отслеживания именно ссылок (не заголовков и разделов)
+const urlKey=it=>(it.sec||'')+'|'+it.name+'|'+(it.url||'');
 
 function typeTag(it){
   const u=(it.url||'').toLowerCase(), n=(it.name||'').toLowerCase(), sec=(it.sec||'').toLowerCase();
@@ -583,7 +585,7 @@ function matches(it){
   return query.split(/\s+/).every(w=>hay.includes(w));
 }
 function cardHTML(jk,items){
-  const hasNew=items.some(i=>SEEN&&!SEEN.includes(key(i)));
+  const hasNew=items.some(i=>i.url&&SEEN&&!SEEN.includes(urlKey(i)));
   const dotCls=hasNew?' is-new':'';
   const lblNew=hasNew?'<span class="lbl-new">new</span>':'';
   return '<article class="card"><h3><span class="dot'+dotCls+'"></span>'+esc(jk)+lblNew+'</h3>'+items.map(itemHTML).join('')+'</article>';
@@ -792,7 +794,7 @@ function metrics(){
   document.getElementById('m-sec').textContent=DATA.length;
   showLast(items);
   // фиксируем состав для метки «новое» — со следующего визита
-  setTimeout(()=>store.set('usi:seen-items',items.map(key)),4000);
+  setTimeout(()=>store.set('usi:seen-items',items.map(urlKey)),4000);
 }
 function ts(str){
   const m=/^(\d{2})\.(\d{2})\.(\d{4})(?:\s+(\d{2}):(\d{2}))?/.exec(str||'');
