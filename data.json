@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "13.08.2026 17:52",
+  "updated": "14.08.2026 10:35",
   "sections": [
     {
       "title": "Буклеты",
@@ -811,6 +811,21 @@
             {
               "name": "Вариант 8",
               "url": "https://disk.yandex.ru/d/1bk0W6gbTgKyGg",
+              "updated": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Новый раздел",
+      "cards": [
+        {
+          "jk": "Презентации",
+          "items": [
+            {
+              "name": "Презентация Новый ростов",
+              "url": "https://disk.yandex.ru/d/j44-bYylDtkQ4w",
               "updated": ""
             }
           ]
