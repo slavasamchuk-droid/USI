@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "14.08.2026 10:35",
+  "updated": "14.08.2026 10:37",
   "sections": [
     {
       "title": "Буклеты",
@@ -199,16 +199,6 @@
               "updated": ""
             }
           ]
-        },
-        {
-          "jk": "Новый Ростов",
-          "items": [
-            {
-              "name": "Презентация новый ростов",
-              "url": "https://disk.yandex.ru/d/zdAAlZI8hQ1aLA",
-              "updated": ""
-            }
-          ]
         }
       ]
     },
@@ -376,6 +366,21 @@
             {
               "name": "45 кластер",
               "url": "https://drive.google.com/drive/folders/1zNBA2W_wm4NGevODLvy1o-dVsznuUccU",
+              "updated": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Новый раздел",
+      "cards": [
+        {
+          "jk": "Презентации",
+          "items": [
+            {
+              "name": "Презентация Новый ростов",
+              "url": "https://disk.yandex.ru/d/j44-bYylDtkQ4w",
               "updated": ""
             }
           ]
@@ -811,21 +816,6 @@
             {
               "name": "Вариант 8",
               "url": "https://disk.yandex.ru/d/1bk0W6gbTgKyGg",
-              "updated": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Новый раздел",
-      "cards": [
-        {
-          "jk": "Презентации",
-          "items": [
-            {
-              "name": "Презентация Новый ростов",
-              "url": "https://disk.yandex.ru/d/j44-bYylDtkQ4w",
               "updated": ""
             }
           ]
